@@ -4,8 +4,7 @@ using System.Text;
 
 namespace Editor.Components.Windows
 {
-    public class WindowChoose : AWindow
+    public class WindowLeave : AWindow
     {
-
     }
 }

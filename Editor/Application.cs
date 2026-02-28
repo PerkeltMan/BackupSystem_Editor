@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Editor.Components;
+using Editor.Components.Windows;
 
 namespace Editor
 {
@@ -12,15 +13,28 @@ namespace Editor
 
         public Application()
         {
-            this.windowsInUse.Push();
+            AWindow window = new WindowChoose();
+            window.Application = this;
         }
 
         public void Run()
         {
             while (!turnOff)
             {
+                ConsoleKeyInfo info = Console.ReadKey();
 
+                this.windowsInUse.Peek().HandleKey(info);
             }
+        }
+
+        public void TurnOff()
+        {
+            this.turnOff = true;
+        }
+
+        public void WindowSwitch(Window window)
+        {
+
         }
     }
 }

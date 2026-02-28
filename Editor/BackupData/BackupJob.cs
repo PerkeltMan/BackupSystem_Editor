@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Editor.Components.Windows
+namespace Editor.BackupData
 {
-    public class WindowChoose : AWindow
+    internal class BackupJob
     {
-
     }
 }
