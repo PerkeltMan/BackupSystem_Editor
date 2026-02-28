@@ -7,7 +7,7 @@ namespace Editor
 {
     public class Application
     {
-        private Stack<Window> windowsInUse = new Stack<Window>();
+        private Stack<AWindow> windowsInUse = new Stack<AWindow>();
         private bool turnOff = false;
 
         public Application()

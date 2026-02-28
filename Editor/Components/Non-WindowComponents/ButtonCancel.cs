@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Editor.Components.Components
 {
-    internal class Button_Cancel
+    public class ButtonCancel : IComponent
     {
     }
 }

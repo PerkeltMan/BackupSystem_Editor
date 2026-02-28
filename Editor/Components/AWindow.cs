@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Editor
+namespace Editor.Components
 {
-    public abstract class Window
+    public abstract class AWindow
     {
     }
 }

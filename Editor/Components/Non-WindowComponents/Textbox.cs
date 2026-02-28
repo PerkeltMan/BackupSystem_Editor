@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Editor.Components.Components
 {
-    internal class Textbox
+    public class Textbox : IComponent
     {
     }
 }

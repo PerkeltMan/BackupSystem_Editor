@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Editor.Components.Windows
 {
-    internal class Window_ChangePath
+    public class WindowChangePath : AWindow
     {
     }
 }
