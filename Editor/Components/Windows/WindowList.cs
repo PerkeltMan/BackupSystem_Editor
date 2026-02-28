@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Editor.Components.Windows
 {
-    public class WindowLeave : Window
+    public class WindowChoose : Window
     {
         public override void Draw()
         {

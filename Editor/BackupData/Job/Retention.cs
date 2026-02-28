@@ -4,7 +4,10 @@ using System.Text;
 
 namespace Editor.BackupData.Job
 {
-    internal class Retention
+    public class Retention
     {
+        public int Count { get; set; }
+        public int Size { get; set; }
+        public required BackupJob BackupJob { get; set; }
     }
 }

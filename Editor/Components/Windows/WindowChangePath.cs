@@ -4,7 +4,16 @@ using System.Text;
 
 namespace Editor.Components.Windows
 {
-    public class WindowChangePath : AWindow
+    public class WindowChangePath : Window
     {
+        public override void Draw()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void HandleKey(ConsoleKeyInfo keyInfo)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

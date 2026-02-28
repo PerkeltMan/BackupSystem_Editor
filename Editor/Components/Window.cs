@@ -4,12 +4,10 @@ using System.Text;
 
 namespace Editor.Components
 {
-    public abstract class AWindow
+    public abstract class Window
     {
-        public Application Application {  get; set; }
-
+        public required Application Application { get; set; }
         public abstract void HandleKey(ConsoleKeyInfo keyInfo);
-
         public abstract void Draw();
     }
 }

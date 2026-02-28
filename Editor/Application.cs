@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Editor.BackupData;
+using Editor.BackupData.Job;
 using Editor.Components;
 using Editor.Components.Windows;
 
@@ -8,13 +10,16 @@ namespace Editor
 {
     public class Application
     {
-        private Stack<AWindow> windowsInUse = new Stack<AWindow>();
+        private Stack<Window> windowsInUse = new Stack<Window>();
         private bool turnOff = false;
+        public List<BackupJob> Jobs = new List<BackupJob>();
 
         public Application()
-        {
-            AWindow window = new WindowChoose();
-            window.Application = this;
+        { 
+            ConfigReader reader = new ConfigReader();
+            this.Jobs = reader.PrepareJobs();
+
+            this.CreateWindow(new WindowChoose());
         }
 
         public void Run()
@@ -32,9 +37,10 @@ namespace Editor
             this.turnOff = true;
         }
 
-        public void WindowSwitch(Window window)
+        public void CreateWindow(Window window)
         {
-
+            window.Application = this;
+            this.windowsInUse.Push(window);
         }
     }
 }
