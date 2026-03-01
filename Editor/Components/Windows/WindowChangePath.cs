@@ -6,6 +6,11 @@ namespace Editor.Components.Windows
 {
     public class WindowChangePath : Window
     {
+        private string path;
+        public WindowChangePath(string path)
+        {
+            this.path = path;
+        }
         public override void Draw()
         {
             throw new NotImplementedException();

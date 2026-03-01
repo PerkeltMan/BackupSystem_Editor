@@ -20,7 +20,7 @@ namespace Editor
             ConfigReader configReader = new ConfigReader();
             this.Jobs = configReader.PrepareJobs();
 
-            this.CreateWindow(new WindowList(this.Jobs));
+            this.CreateWindow(new WindowList(this.Jobs, this));
             Console.CursorVisible = false;
         }
 
@@ -28,7 +28,11 @@ namespace Editor
         {
             while (!turnOff)
             {
-                this.WindowsInUse.Peek().Draw();
+                foreach (var window in this.WindowsInUse)
+                {
+                    window.Draw();
+                }
+                //this.WindowsInUse.Peek().Draw();
 
                 ConsoleKeyInfo info = Console.ReadKey();
 
@@ -48,9 +52,13 @@ namespace Editor
             this.Jobs.RemoveAt(index);
         }
 
+        public void EditJob(BackupJob job, int index)
+        {
+            this.Jobs[index] = job;
+        }
+
         public void CreateWindow(Window window)
         {
-            window.Application = this;
             this.WindowsInUse.Push(window);
         }
     }

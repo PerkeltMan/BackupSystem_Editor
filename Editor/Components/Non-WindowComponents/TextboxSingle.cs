@@ -4,30 +4,30 @@ using System.Text;
 
 namespace Editor.Components.Components
 {
-    public class Textbox : IComponent
+    public class TextboxSingle : Textbox
     {
-        private string label;
         private string value;
+        private string label;
         private Dictionary<ConsoleKey, Action> keys = new Dictionary<ConsoleKey, Action>();
 
         public event Action<string>? ValueChanged;
 
-        public Textbox(string label, string value)
+        public TextboxSingle(string label, string value)
         {
-            this.label = label;
             this.value = value;
+            this.label = label;
 
             this.keys[ConsoleKey.Backspace] = this.Backspace;
             this.keys[ConsoleKey.Enter] = this.Enter;
         }
 
-        public void Draw()
+        public override void Draw()
         {
             Console.WriteLine(this.label);
-            Console.WriteLine("[ " + this.value + " ]");
+            Console.WriteLine("[ " + this.value);
         }
 
-        public void HandleKey(ConsoleKeyInfo info)
+        public override void HandleKey(ConsoleKeyInfo info)
         {
             if (this.keys.ContainsKey(info.Key))
             {

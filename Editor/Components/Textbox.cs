@@ -4,9 +4,9 @@ using System.Text;
 
 namespace Editor.Components
 {
-    public abstract class Window
+    public abstract class Textbox : IComponent
     {
-        public abstract void HandleKey(ConsoleKeyInfo keyInfo);
         public abstract void Draw();
+        public abstract void HandleKey(ConsoleKeyInfo info);
     }
 }
