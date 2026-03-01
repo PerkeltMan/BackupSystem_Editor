@@ -11,7 +11,7 @@ namespace Editor.BackupData
         public int ID { get; set; }
 
         [JsonProperty("Name")]
-        public required string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
 
         [JsonProperty("Sources")]
         public List<string> Sources = new List<string>();
@@ -19,19 +19,25 @@ namespace Editor.BackupData
         [JsonProperty("Targets")]
         public List<string> Targets = new List<string>();
 
-        [JsonProperty("Method")]
-        public required string Method { get; set; }
+        [JsonProperty("Method")] 
+        public string Method { get; set; } = string.Empty;
 
         [JsonProperty("Timing")]
-        public required string Timing { get; set; }
+        public string Timing { get; set; } = string.Empty;
 
         [JsonProperty("Retention")]
-        public required Retention Retention {  get; set; }
+        public Retention Retention {  get; set; }
 
         public BackupJob(Retention retention)
         {
             this.Retention = retention;
             this.Retention.BackupJob = this;
+        }
+
+        public BackupJob()
+        {
+            Retention retention = new Retention() {Size = 0, Count = 0, BackupJob = this };
+            this.Retention = retention;
         }
     }
 }

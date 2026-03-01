@@ -15,28 +15,52 @@ namespace Editor.Components.Windows.Editing
         private BackupJob job;
         private int jobID;
         private int selectedComponent = 0;
+        private Dictionary<ConsoleKey, Action> keys = new Dictionary<ConsoleKey, Action>();
+        public event Action<BackupJob>? SaveAction;
 
         private List<IComponent> components = new List<IComponent>();
 
-        public WindowEdit(BackupJob job, int jobID)
+        public WindowEdit(BackupJob job, int jobID, Action<BackupJob>? saveAction)
         {
             this.job = job;
             this.jobID = jobID;
+            this.SaveAction = saveAction;
 
-            List<TextboxSingle> textboxes = new List<TextboxSingle>();
-            textboxes.Add(new TextboxSingle("Name", job.Name));
-            textboxes.Add(new TextboxSingle("Method", job.Method));
-            textboxes.Add(new TextboxSingle("Schedule", job.Timing));
-            textboxes.Add(new TextboxSingle("Count", job.Retention.Count.ToString()));
-            textboxes.Add(new TextboxSingle("Size", job.Retention.Size.ToString()));
+            List<Textbox> textboxes = new List<Textbox>();
+            textboxes.Add(new Textbox("Name", job.Name));
+            textboxes.Add(new Textbox("Method", job.Method));
+            textboxes.Add(new Textbox("Schedule", job.Timing));
+            textboxes.Add(new Textbox("Count", job.Retention.Count.ToString()));
+            textboxes.Add(new Textbox("Size", job.Retention.Size.ToString()));
 
-            foreach (TextboxSingle textbox in textboxes)
+            foreach (Textbox textbox in textboxes)
             {
-                TextboxSingle captured = textbox;
+                Textbox captured = textbox;
 
                 captured.ValueChanged += (newValue) =>
                 {
                     captured.Value = newValue;
+
+                    switch (captured.Label)
+                    {
+                        case "Name":
+                            this.job.Name = newValue;
+                            break;
+                        case "Method":
+                            this.job.Method = newValue;
+                            break;
+                        case "Schedule":
+                            this.job.Timing = newValue;
+                            break;
+                        case "Count":
+                            if (int.TryParse(newValue, out int count))
+                                this.job.Retention.Count = count;
+                            break;
+                        case "Size":
+                            if (int.TryParse(newValue, out int size))
+                                this.job.Retention.Size = size;
+                            break;
+                    }
                 };
 
                 this.components.Add((IComponent)captured);
@@ -46,133 +70,82 @@ namespace Editor.Components.Windows.Editing
             sourceButton.Clicked += () =>
             {
                 this.Application.CreateWindow(new WindowPathChanging(this.job.Sources));
-            };  
+            };
+            this.components.Add(sourceButton);
 
+            Button targetButton = new Button("Destination");
+            targetButton.Clicked += () =>
+            {
+                this.Application.CreateWindow(new WindowPathChanging(this.job.Targets));
+            };
+            this.components.Add(targetButton);
+
+            Button btnSAve = new Button("Save");
+            btnSAve.Clicked += () =>
+            {
+                WindowChoose confirm = new WindowChoose("Are you sure you want to save the changes?");
+                confirm.Confirm += () =>
+                {
+                    this.SaveAction?.Invoke(this.job);
+                    this.Application.WindowsInUse.Pop();
+                    this.Application.WindowsInUse.Pop();
+                };
+                
+                confirm.Cancel += () =>
+                {
+                    this.Application.WindowsInUse.Pop();
+                };
+
+                this.Application.CreateWindow(confirm);
+            };
+            this.components.Add(btnSAve);
+
+            Button btnCancel = new Button("Cancel");
+            btnCancel.Clicked += () =>
+            {
+                this.Application.WindowsInUse.Pop();
+            };
+            this.components.Add(btnCancel);
+
+            this.keys.Add(ConsoleKey.UpArrow, this.KeyUp);
+            this.keys.Add(ConsoleKey.DownArrow, this.KeyDown);
         }
-
 
 
         public override void Draw()
         {
-            throw new NotImplementedException();
+            for (int i = 0; i < this.components.Count; i++)
+            {
+                if (i == this.selectedComponent)
+                {
+                    Console.ForegroundColor = ConsoleColor.Green;
+                }
+
+                this.components[i].Draw();
+                Console.ResetColor();
+            }
         }
 
         public override void HandleKey(ConsoleKeyInfo keyInfo)
         {
-            throw new NotImplementedException();
+            if (this.keys.ContainsKey(keyInfo.Key))
+            {
+                this.keys[keyInfo.Key]();
+            }
+            else
+            {
+                this.components[this.selectedComponent].HandleKey(keyInfo);
+            }
         }
 
-        public void BtnSave_Clicked()
+        private void KeyUp()
         {
-            this.Application.EditJob(this.job, this.jobID);
-            this.Application.WindowsInUse.Pop();
+            this.selectedComponent = Math.Max(--this.selectedComponent, 0);
         }
 
-        public void BtnCancel_Clicked() 
+        private void KeyDown()
         {
-            this.Application.WindowsInUse.Pop();
+            this.selectedComponent = Math.Min(++this.selectedComponent, this.components.Count - 1);
         }
-
-        //private Dictionary<ConsoleKey, Action> keys = new Dictionary<ConsoleKey, Action>();
-        //private BackupJob job;
-        //private List<IComponent> components = new List<IComponent>();
-        //private List<WindowPaths> windowsPaths = new List<WindowPaths>();
-        //private int selectedComponent = 0;
-        //private int jobID;
-
-        //public event Action<BackupJob>? JobEdited;
-        //public event Action? EditCanceled;
-        //public event Action<WindowPathChanging>? ChangePathRequested;
-        //public event Action<WindowPaths>? IntoPathsEntrance;
-
-        //public WindowEdit(BackupJob job, int jobID)
-        //{
-        //    this.job = job;   
-        //    this.jobID = jobID;
-
-        //    this.components.Add(new TextboxSingle("Name", job.Name));
-        //    this.components.Add(new TextboxSingle("Method", job.Method));
-        //    this.components.Add(new TextboxSingle("Schedule", job.Timing));
-        //    this.components.Add(new TextboxSingle("Count", job.Retention.Count.ToString()));
-        //    this.components.Add(new TextboxSingle("Size", job.Retention.Size.ToString()));
-
-        //    foreach (IComponent component in this.components)
-        //    {
-        //        component. += this.Change;
-        //    }
-
-        //    this.UpdateComponentList();
-
-        //    this.keys.Add(ConsoleKey.UpArrow, this.KeyUp);
-        //    this.keys.Add(ConsoleKey.DownArrow, this.KeyDown);
-        //}
-
-        //public override void Draw()
-        //{
-        //    Console.WriteLine(job.ID);
-
-        //    for (int i = 0; i < this.components.Count; i++)
-        //    {
-        //        if (i == this.selectedComponent)
-        //        {
-        //            Console.ForegroundColor = ConsoleColor.Green;
-        //        }
-
-        //        this.components[i].Draw();
-        //        Console.ResetColor();
-        //    }
-        //}
-
-        //public override void HandleKey(ConsoleKeyInfo keyInfo)
-        //{
-        //    if (this.keys.ContainsKey(keyInfo.Key))
-        //    {
-        //        this.keys[keyInfo.Key]();
-        //    }
-        //    else
-        //    {
-        //        this.components[this.selectedComponent].HandleKey(keyInfo);
-        //    }
-        //}
-
-        //private void KeyUp()
-        //{
-        //    this.selectedComponent = Math.Max(--this.selectedComponent, 0);
-        //}
-
-        //private void KeyDown()
-        //{
-        //    this.selectedComponent = Math.Min(++this.selectedComponent, this.components.Count - 1);
-        //}
-
-        //public void Save()
-        //{
-        //    this.Application.EditJob(this.job, this.jobID);
-        //}
-
-        //public void Cancel()
-        //{
-        //    this.Application.WindowsInUse.Pop();
-        //}
-
-        //public void Change(value)
-        //{
-        //    this.components[selectedComponent] = (IComponent)value;
-        //}
-
-        //private void UpdateComponentList()
-        //{
-        //    this.components.Clear();
-
-        //    this.components.Add((new TextboxSingle("Name", this.job.Name)));
-        //    this.components.Add(new WindowPaths("Source", this.job.Sources));
-        //    this.components.Add(new WindowPaths("Destination", this.job.Targets));
-        //    this.components.Add((IComponent)new Components.TextboxSingle("Type", this.job.Method));
-        //    this.components.Add((IComponent)new Components.TextboxSingle("Schedule", this.job.Timing));
-        //    this.components.Add((IComponent)new Components.TextboxSingle("Count", this.job.Retention.Count.ToString()));
-        //    this.components.Add((IComponent)new Components.TextboxSingle("Size", this.job.Retention.Size.ToString()));
-        //    this.components.Add(new Button("Save"));
-        //    this.components.Add(new Button("Cancel"));
-        //}
     }
 }

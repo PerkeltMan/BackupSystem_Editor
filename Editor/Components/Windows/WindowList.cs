@@ -34,7 +34,7 @@ namespace Editor.Components.Windows
             for (int i = 0; i < this.backupJobs.Count; i++)
             {
                 JobPreview jobPrev = new JobPreview(this.backupJobs[i]);
-                jobPrev.IsSelected += this.Selected;
+                jobPrev.IsSelected += this.SelectJob;
                 jobPrev.DeletePending += this.Delete;
 
                 previews.Add(jobPrev);
@@ -81,10 +81,25 @@ namespace Editor.Components.Windows
             this.selectedPreview = Math.Min(++this.selectedPreview, this.previews.Count - 1);
         }
 
-        /// WINDOWS CREATION
-        private void Selected(BackupJob job)
+        /// WINDOWS CREATION 
+        private void SelectJob(BackupJob job)
         {
-            WindowEdit windowEdit = new WindowEdit(job, this.selectedPreview);           
+            WindowEdit windowEdit = new WindowEdit(job, this.selectedPreview, (editedJob) =>
+            {
+                this.Application.EditJob(editedJob, this.selectedPreview);
+            });
+
+            this.Application.CreateWindow(windowEdit);
+        }
+
+        private void CreateNewJob()
+        {
+            WindowEdit windowEdit = new WindowEdit(new BackupJob(), this.Application.Jobs.Count, (newJob) =>
+            {
+                this.Application.AddJob(newJob);
+                this.UpdatePreviews();
+            });
+
             this.Application.CreateWindow(windowEdit);
         }
 
@@ -97,7 +112,7 @@ namespace Editor.Components.Windows
             choose.Confirm += () =>
             {
                 this.Application.DeleteJob(this.selectedPreview);
-                this.UpdatePreviews();   
+                this.UpdatePreviews();
                 this.Application.WindowsInUse.Pop();
             };
 
@@ -107,11 +122,6 @@ namespace Editor.Components.Windows
             };
 
             this.Application.CreateWindow(choose);
-        }
-
-        private void CreateNewJob()
-        {
-            this.Application.CreateWindow(new WindowAdd());
         }
 
         private void Leave()

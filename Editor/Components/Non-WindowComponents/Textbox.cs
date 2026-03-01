@@ -2,21 +2,22 @@
 using System.Collections.Generic;
 using System.Text;
 using Editor.Components.AbstractClasses;
+using Editor.Components.Interfaces;
 
 namespace Editor.Components.Components
 {
-    public class TextboxSingle
+    public class Textbox : IComponent
     {
         public string Value;
-        private string label;
+        public string Label;
         private Dictionary<ConsoleKey, Action> keys = new Dictionary<ConsoleKey, Action>();
 
         public event Action<string>? ValueChanged;
 
-        public TextboxSingle(string label, string value)
+        public Textbox(string label, string value)
         {
             this.Value = value;
-            this.label = label;
+            this.Label = label;
 
             this.keys[ConsoleKey.Backspace] = this.Backspace;
             this.keys[ConsoleKey.Enter] = this.Enter;
@@ -24,7 +25,7 @@ namespace Editor.Components.Components
 
         public void Draw()
         {
-            Console.WriteLine(this.label);
+            Console.WriteLine(this.Label);
             Console.WriteLine("[ " + this.Value);
         }
 

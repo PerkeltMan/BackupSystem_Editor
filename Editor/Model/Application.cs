@@ -51,6 +51,13 @@ namespace Editor.Model
             configManipulator.SaveJobs(this.Jobs);
         }
 
+        public void AddJob(BackupJob job)
+        {
+            job.ID = this.Jobs.Count;
+            this.Jobs.Add(job);
+            configManipulator.SaveJobs(this.Jobs);
+        }
+
         public void CreateWindow(Window window)
         {
             window.Application = this;
