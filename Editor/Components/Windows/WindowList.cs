@@ -13,23 +13,35 @@ namespace Editor.Components.Windows
         private List<Preview> previews = new List<Preview>();
         private int selectedPreview = 0;
         private Dictionary<ConsoleKey, Action> keys = new Dictionary<ConsoleKey, Action>();
-        public event Action<int>? Selected;
         public WindowList()
         {
             ConfigReader reader = new ConfigReader();
             this.jobs = reader.PrepareJobs();
 
-            foreach (BackupJob job in this.jobs)
-            {
-                this.previews.Add(new Preview(job.Name));
-            }
+            this.UpdatePreviews();
 
-            this.previews.Add(new Preview("add"));
-
-            this.keys[ConsoleKey.Spacebar] = this.Select;
             this.keys[ConsoleKey.UpArrow] = this.KeyUp;
             this.keys[ConsoleKey.DownArrow] = this.KeyDown;
-            this.keys[ConsoleKey.Q] = this.Delete;
+        }
+
+        private void UpdatePreviews()
+        {
+            List<Preview> previews = new List<Preview>();
+
+            for (int i = 0; i < this.jobs.Count; i++)
+            {
+                JobPreview jobPrev = new JobPreview(this.jobs[i]);
+                jobPrev.IsSelected += this.Selected;
+                jobPrev.DeletePending += this.Delete;
+
+                previews.Add(jobPrev);
+            }
+
+            AddPreview addPrev = new AddPreview();
+            addPrev.NewJob += this.NewJob;
+            previews.Add(addPrev);
+
+            this.previews = previews;
         }
 
         public override void Draw()
@@ -63,11 +75,7 @@ namespace Editor.Components.Windows
             {
                 this.keys[keyInfo.Key].Invoke();
             }
-        }
-
-        private void Select()
-        {
-            this.Selected?.Invoke(this.selectedPreview);
+            else this.previews[selectedPreview].HandleKey(keyInfo);
         }
 
         private void KeyUp()
@@ -80,16 +88,22 @@ namespace Editor.Components.Windows
             this.selectedPreview = Math.Min(++this.selectedPreview, this.previews.Count - 1);
         }
 
+        private void Selected(BackupJob job)
+        {
+            this.Application.CreateWindow(new WindowEdit(job));
+        }
+
+
         // the last preview will always be the add new preview
         // cannot be deleted
-        private void Delete()
+        private void Delete(BackupJob job)
         {
-            if (this.selectedPreview == this.previews.Count - 1)
-            {
-                return;
-            }
+            this.Application.CreateWindow(new WindowDelete(job));
+        }
 
-            this.previews.RemoveAt(this.selectedPreview);
+        private void NewJob()
+        {
+            this.Application.CreateWindow(new WindowAccept());
         }
     }
 }
