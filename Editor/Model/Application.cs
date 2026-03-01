@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Editor.BackupData;
-using Editor.BackupData.Job;
-using Editor.Components;
+﻿using Editor.BackupData;
+using Editor.Components.AbstractClasses;
 using Editor.Components.Windows;
 
-namespace Editor
+namespace Editor.Model
 {
     //┌┐─│└┘
     public class Application
@@ -14,11 +10,11 @@ namespace Editor
         public Stack<Window> WindowsInUse = new Stack<Window>();
         public List<BackupJob> Jobs = new List<BackupJob>();
         private bool turnOff = false;
-
+        private ConfigFileManipulation configManipulator;
         public Application()
         {
-            ConfigReader configReader = new ConfigReader();
-            this.Jobs = configReader.PrepareJobs();
+            this.configManipulator = new ConfigFileManipulation();
+            this.Jobs = configManipulator.PrepareJobs();
 
             this.CreateWindow(new WindowList(this.Jobs, this));
             Console.CursorVisible = false;
@@ -28,11 +24,7 @@ namespace Editor
         {
             while (!turnOff)
             {
-                foreach (var window in this.WindowsInUse)
-                {
-                    window.Draw();
-                }
-                //this.WindowsInUse.Peek().Draw();
+                this.WindowsInUse.Peek().Draw();
 
                 ConsoleKeyInfo info = Console.ReadKey();
 
@@ -50,11 +42,13 @@ namespace Editor
         public void DeleteJob(int index)
         {
             this.Jobs.RemoveAt(index);
+            configManipulator.SaveJobs(this.Jobs);
         }
 
         public void EditJob(BackupJob job, int index)
         {
             this.Jobs[index] = job;
+            configManipulator.SaveJobs(this.Jobs);
         }
 
         public void CreateWindow(Window window)

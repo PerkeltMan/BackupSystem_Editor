@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Editor.Components.Interfaces;
+using Editor.Components.Windows.Editing;
 
 namespace Editor.Components.Windows
 {
@@ -12,7 +14,7 @@ namespace Editor.Components.Windows
         private bool isIn = false;
         private int selectedIndex = 0;
 
-        public event Action<WindowChangePath>? ChangePathRequested;
+        public event Action<WindowPathChanging>? ChangePathRequested;
         public event Action? ExitRequested;
         public event Action? EntranceRequested;
 
@@ -80,7 +82,7 @@ namespace Editor.Components.Windows
 
         private void Select()
         {
-            this.ChangePathRequested?.Invoke(new WindowChangePath(this.values[selectedIndex]));
+            this.ChangePathRequested?.Invoke(new WindowPathChanging(this.values[selectedIndex]));
         }
     }
 }

@@ -6,13 +6,14 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Xml;
-using Editor.BackupData.Job;
+using Editor.BackupData;
 using Newtonsoft.Json;
+using Formatting = Newtonsoft.Json.Formatting;
 using JsonException = Newtonsoft.Json.JsonException;
 
-namespace Editor.BackupData
+namespace Editor.Model
 {
-    public class ConfigReader
+    public class ConfigFileManipulation
     {
         private const string FILE = @"D:\\config.json";
 
@@ -61,6 +62,19 @@ namespace Editor.BackupData
             }
 
             return result;
+        }
+
+        public void SaveJobs(List<BackupJob> jobs)
+        {
+            try
+            {
+                string json = JsonConvert.SerializeObject(jobs, Formatting.Indented);
+                File.WriteAllText(FILE, json);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Failed to save backup jobs: {ex.Message}");
+            }
         }
     }
 }

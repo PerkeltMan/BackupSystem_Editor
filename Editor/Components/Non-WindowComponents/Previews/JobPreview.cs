@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Editor.BackupData.Job;
+using Editor.BackupData;
+using Editor.Components.AbstractClasses;
 
 namespace Editor.Components.Non_WindowComponents
 {

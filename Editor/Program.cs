@@ -1,4 +1,6 @@
-﻿namespace Editor
+﻿using Editor.Model;
+
+namespace Editor
 {
     internal class Program
     {

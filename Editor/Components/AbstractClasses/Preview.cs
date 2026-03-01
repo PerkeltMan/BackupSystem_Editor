@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Editor.Components.Interfaces;
 
-namespace Editor.Components.Non_WindowComponents
+namespace Editor.Components.AbstractClasses
 {
     public abstract class Preview : IComponent
     {

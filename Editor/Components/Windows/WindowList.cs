@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Text;
 using Editor.BackupData;
-using Editor.BackupData.Job;
+using Editor.Components.AbstractClasses;
 using Editor.Components.Non_WindowComponents;
+using Editor.Components.Windows.Editing;
+using Editor.Model;
 
 namespace Editor.Components.Windows
 {
@@ -97,7 +99,7 @@ namespace Editor.Components.Windows
                 this.application.WindowsInUse.Pop();
             };
 
-            windowEdit.ChangePathRequested += (WindowChangePath changePath) =>
+            windowEdit.ChangePathRequested += (WindowPathChanging changePath) =>
             {
                 this.application.CreateWindow(changePath);
             };

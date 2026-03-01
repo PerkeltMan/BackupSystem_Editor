@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Editor.Components.AbstractClasses;
 
-namespace Editor.Components.Windows
+namespace Editor.Components.Windows.Editing
 {
-    public class WindowChangePath : Window
+    public class WindowPathChanging : Window
     {
         private string path;
-        public WindowChangePath(string path)
+        public WindowPathChanging(string path)
         {
             this.path = path;
         }

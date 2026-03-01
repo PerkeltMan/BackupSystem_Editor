@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Editor.Components.AbstractClasses;
 
 namespace Editor.Components.Components
 {

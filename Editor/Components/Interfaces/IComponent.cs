@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Editor.Components
+namespace Editor.Components.Interfaces
 {
     public interface IComponent
     {

@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Editor.BackupData.Job;
+using Editor.BackupData;
+using Editor.Components.AbstractClasses;
 using Editor.Components.Components;
+using Editor.Components.Interfaces;
 using Editor.Components.Non_WindowComponents;
 
-namespace Editor.Components.Windows
+namespace Editor.Components.Windows.Editing
 {
     public class WindowEdit : Window
     {
@@ -16,7 +18,7 @@ namespace Editor.Components.Windows
 
         public event Action<BackupJob>? JobEdited;
         public event Action? EditCanceled;
-        public event Action<WindowChangePath>? ChangePathRequested;
+        public event Action<WindowPathChanging>? ChangePathRequested;
         public event Action<WindowPaths>? IntoPathsEntrance;
 
         public WindowEdit(BackupJob job)
@@ -71,14 +73,13 @@ namespace Editor.Components.Windows
         {
             this.components.Clear();
 
-            this.components.Add(new TextboxSingle("Name", this.job.Name));
+            this.components.Add((IComponent)new Components.TextboxSingle("Name", this.job.Name));
             this.components.Add(new WindowPaths("Source", this.job.Sources));
-            
             this.components.Add(new WindowPaths("Destination", this.job.Targets));
-            this.components.Add(new TextboxSingle("Type", this.job.Method));
-            this.components.Add(new TextboxSingle("Schedule", this.job.Timing));
-            this.components.Add(new TextboxSingle("Count", this.job.Retention.Count.ToString()));
-            this.components.Add(new TextboxSingle("Size", this.job.Retention.Size.ToString()));
+            this.components.Add((IComponent)new Components.TextboxSingle("Type", this.job.Method));
+            this.components.Add((IComponent)new Components.TextboxSingle("Schedule", this.job.Timing));
+            this.components.Add((IComponent)new Components.TextboxSingle("Count", this.job.Retention.Count.ToString()));
+            this.components.Add((IComponent)new Components.TextboxSingle("Size", this.job.Retention.Size.ToString()));
             this.components.Add(new Button("Save"));
             this.components.Add(new Button("Cancel"));
         }
