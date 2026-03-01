@@ -15,11 +15,9 @@ namespace Editor.Components.Windows
         private int selectedPreview = 0;
         private List<Preview> previews = new List<Preview>();
         private Dictionary<ConsoleKey, Action> keys = new Dictionary<ConsoleKey, Action>();
-        private Application application;
 
-        public WindowList(List<BackupJob> jobs, Application application)
+        public WindowList(List<BackupJob> jobs)
         {
-            this.application = application;
             this.backupJobs = jobs;
 
             this.UpdatePreviews();
@@ -86,25 +84,8 @@ namespace Editor.Components.Windows
         /// WINDOWS CREATION
         private void Selected(BackupJob job)
         {
-            WindowEdit windowEdit = new WindowEdit(job);
-
-            windowEdit.JobEdited += (BackupJob job) =>
-            {
-                this.application.EditJob(job, this.selectedPreview);
-                this.application.WindowsInUse.Pop();
-            };
-
-            windowEdit.EditCanceled += () =>
-            {
-                this.application.WindowsInUse.Pop();
-            };
-
-            windowEdit.ChangePathRequested += (WindowPathChanging changePath) =>
-            {
-                this.application.CreateWindow(changePath);
-            };
-
-            this.application.CreateWindow(new WindowEdit(job));
+            WindowEdit windowEdit = new WindowEdit(job, this.selectedPreview);           
+            this.Application.CreateWindow(windowEdit);
         }
 
         private void Delete()
@@ -115,22 +96,22 @@ namespace Editor.Components.Windows
 
             choose.Confirm += () =>
             {
-                this.application.DeleteJob(this.selectedPreview);
+                this.Application.DeleteJob(this.selectedPreview);
                 this.UpdatePreviews();   
-                this.application.WindowsInUse.Pop();
+                this.Application.WindowsInUse.Pop();
             };
 
             choose.Cancel += () =>
             {
-                this.application.WindowsInUse.Pop();
+                this.Application.WindowsInUse.Pop();
             };
 
-            this.application.CreateWindow(choose);
+            this.Application.CreateWindow(choose);
         }
 
         private void CreateNewJob()
         {
-            this.application.CreateWindow(new WindowAdd());
+            this.Application.CreateWindow(new WindowAdd());
         }
 
         private void Leave()
@@ -141,15 +122,15 @@ namespace Editor.Components.Windows
 
             choose.Confirm += () =>
             {
-                this.application.TurnOff();
+                this.Application.TurnOff();
             };
 
             choose.Cancel += () =>
             {
-                this.application.WindowsInUse.Pop();
+                this.Application.WindowsInUse.Pop();
             };
 
-            this.application.CreateWindow(choose);
+            this.Application.CreateWindow(choose);
         }
     }
 }

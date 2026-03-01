@@ -5,9 +5,9 @@ using Editor.Components.AbstractClasses;
 
 namespace Editor.Components.Components
 {
-    public class TextboxSingle : Textbox
+    public class TextboxSingle
     {
-        private string value;
+        public string Value;
         private string label;
         private Dictionary<ConsoleKey, Action> keys = new Dictionary<ConsoleKey, Action>();
 
@@ -15,20 +15,20 @@ namespace Editor.Components.Components
 
         public TextboxSingle(string label, string value)
         {
-            this.value = value;
+            this.Value = value;
             this.label = label;
 
             this.keys[ConsoleKey.Backspace] = this.Backspace;
             this.keys[ConsoleKey.Enter] = this.Enter;
         }
 
-        public override void Draw()
+        public void Draw()
         {
             Console.WriteLine(this.label);
-            Console.WriteLine("[ " + this.value);
+            Console.WriteLine("[ " + this.Value);
         }
 
-        public override void HandleKey(ConsoleKeyInfo info)
+        public void HandleKey(ConsoleKeyInfo info)
         {
             if (this.keys.ContainsKey(info.Key))
             {
@@ -36,17 +36,17 @@ namespace Editor.Components.Components
             }
             else if (!char.IsControl(info.KeyChar))
             {
-                this.value += info.KeyChar;
-                this.ValueChanged?.Invoke(this.value);
+                this.Value += info.KeyChar;
+                this.ValueChanged?.Invoke(this.Value);
             }
         }
 
         private void Backspace()
         {
-            if (this.value.Length > 0)
+            if (this.Value.Length > 0)
             {
-                this.value = this.value.Substring(0, this.value.Length - 1);
-                this.ValueChanged?.Invoke(this.value);
+                this.Value = this.Value.Substring(0, this.Value.Length - 1);
+                this.ValueChanged?.Invoke(this.Value);
             }
         }
 

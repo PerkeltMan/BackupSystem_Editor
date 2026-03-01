@@ -16,7 +16,7 @@ namespace Editor.Model
             this.configManipulator = new ConfigFileManipulation();
             this.Jobs = configManipulator.PrepareJobs();
 
-            this.CreateWindow(new WindowList(this.Jobs, this));
+            this.CreateWindow(new WindowList(this.Jobs));
             Console.CursorVisible = false;
         }
 
@@ -53,6 +53,7 @@ namespace Editor.Model
 
         public void CreateWindow(Window window)
         {
+            window.Application = this;
             this.WindowsInUse.Push(window);
         }
     }

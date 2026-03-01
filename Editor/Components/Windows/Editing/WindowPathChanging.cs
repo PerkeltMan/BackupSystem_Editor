@@ -7,10 +7,10 @@ namespace Editor.Components.Windows.Editing
 {
     public class WindowPathChanging : Window
     {
-        private string path;
-        public WindowPathChanging(string path)
+        private List<string> paths;
+        public WindowPathChanging(List<string> paths)
         {
-            this.path = path;
+            this.paths = paths;
         }
         public override void Draw()
         {
