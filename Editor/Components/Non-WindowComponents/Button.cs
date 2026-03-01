@@ -2,16 +2,16 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Editor.Components.Windows
+namespace Editor.Components.Components
 {
-    public class AddWindow : Window
+    public class Button : IComponent
     {
-        public override void Draw()
+        public void Draw()
         {
             throw new NotImplementedException();
         }
 
-        public override void HandleKey(ConsoleKeyInfo keyInfo)
+        public void HandleKey(ConsoleKeyInfo info)
         {
             throw new NotImplementedException();
         }

@@ -22,6 +22,7 @@ namespace Editor.Components.Windows
 
             this.keys[ConsoleKey.UpArrow] = this.KeyUp;
             this.keys[ConsoleKey.DownArrow] = this.KeyDown;
+            this.keys[ConsoleKey.Escape] = this.Leave;
         }
 
         private void UpdatePreviews()
@@ -93,17 +94,19 @@ namespace Editor.Components.Windows
             this.Application.CreateWindow(new WindowEdit(job));
         }
 
-
-        // the last preview will always be the add new preview
-        // cannot be deleted
         private void Delete(BackupJob job)
         {
-            this.Application.CreateWindow(new WindowDelete(job));
+            this.Application.CreateWindow(new WindowChoose(job));
         }
 
         private void NewJob()
         {
-            this.Application.CreateWindow(new WindowAccept());
+            this.Application.CreateWindow(new WindowAdd());
+        }
+
+        private void Leave()
+        {
+            //to do
         }
     }
 }
