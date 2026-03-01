@@ -9,14 +9,14 @@ namespace Editor.Components.Windows
 {
     public class WindowList : Window
     {
-        private List<BackupJob> jobs;
-        private List<Preview> previews = new List<Preview>();
+        private List<BackupJob> backupJobs;
         private int selectedPreview = 0;
+        private List<Preview> previews = new List<Preview>();
         private Dictionary<ConsoleKey, Action> keys = new Dictionary<ConsoleKey, Action>();
-        public WindowList()
+
+        public WindowList(List<BackupJob> jobs)
         {
-            ConfigReader reader = new ConfigReader();
-            this.jobs = reader.PrepareJobs();
+            this.backupJobs = jobs;
 
             this.UpdatePreviews();
 
@@ -25,13 +25,13 @@ namespace Editor.Components.Windows
             this.keys[ConsoleKey.Escape] = this.Leave;
         }
 
-        private void UpdatePreviews()
+        public void UpdatePreviews()
         {
             List<Preview> previews = new List<Preview>();
 
-            for (int i = 0; i < this.jobs.Count; i++)
+            for (int i = 0; i < this.backupJobs.Count; i++)
             {
-                JobPreview jobPrev = new JobPreview(this.jobs[i]);
+                JobPreview jobPrev = new JobPreview(this.backupJobs[i]);
                 jobPrev.IsSelected += this.Selected;
                 jobPrev.DeletePending += this.Delete;
 
@@ -39,7 +39,7 @@ namespace Editor.Components.Windows
             }
 
             AddPreview addPrev = new AddPreview();
-            addPrev.NewJob += this.NewJob;
+            addPrev.NewJob += this.CreateNewJob;
             previews.Add(addPrev);
 
             this.previews = previews;
@@ -57,19 +57,9 @@ namespace Editor.Components.Windows
                 this.previews[i].Draw();
                 Console.ResetColor();
             }
-
-            /*foreach (Preview prev in this.previews)
-            {
-                if (this.selectedPreview == this.previews.IndexOf(prev))
-                {
-                    Console.ForegroundColor = ConsoleColor.Green;
-                }
-
-                prev.Draw();
-                Console.ResetColor();
-            }*/
         }
 
+        /// KEY HANDLING
         public override void HandleKey(ConsoleKeyInfo keyInfo)
         {
             if (keys.ContainsKey(keyInfo.Key))
@@ -89,24 +79,57 @@ namespace Editor.Components.Windows
             this.selectedPreview = Math.Min(++this.selectedPreview, this.previews.Count - 1);
         }
 
+        /// WINDOWS CREATION
         private void Selected(BackupJob job)
         {
+            WindowEdit windowEdit = new WindowEdit(job);
+
             this.Application.CreateWindow(new WindowEdit(job));
         }
 
-        private void Delete(BackupJob job)
+        private void Delete()
         {
-            this.Application.CreateWindow(new WindowChoose(job));
+            string deleteMessage = "Are you sure you want to delete this configuration?";
+
+            WindowChoose choose = new WindowChoose(deleteMessage);
+
+            choose.Confirm += () =>
+            {
+                this.Application.DeleteJob(this.selectedPreview);
+                this.UpdatePreviews();   
+                this.Application.WindowsInUse.Pop();
+            };
+
+            choose.Cancel += () =>
+            {
+                this.Application.WindowsInUse.Pop();
+            };
+
+            this.Application.CreateWindow(choose);
         }
 
-        private void NewJob()
+        private void CreateNewJob()
         {
             this.Application.CreateWindow(new WindowAdd());
         }
 
         private void Leave()
         {
-            //to do
+            string leaveMessage = "Are you sure you want to leave?";
+
+            WindowChoose choose = new WindowChoose(leaveMessage);
+
+            choose.Confirm += () =>
+            {
+                this.Application.TurnOff();
+            };
+
+            choose.Cancel += () =>
+            {
+                this.Application.WindowsInUse.Pop();
+            };
+
+            this.Application.CreateWindow(choose);
         }
     }
 }

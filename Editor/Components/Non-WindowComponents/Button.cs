@@ -6,14 +6,24 @@ namespace Editor.Components.Components
 {
     public class Button : IComponent
     {
+        public string Text;
+        public event Action? Clicked;
+        public Button(string text)
+        {
+            this.Text = text;
+        }
+
         public void Draw()
         {
-            throw new NotImplementedException();
+            Console.WriteLine($"[ {this.Text} ]");
         }
 
         public void HandleKey(ConsoleKeyInfo info)
         {
-            throw new NotImplementedException();
+            if (info.Key == ConsoleKey.Spacebar)
+            {
+                this.Clicked?.Invoke();
+            }
         }
     }
 }

@@ -6,9 +6,20 @@ namespace Editor.Components.Components
 {
     public class Textbox : IComponent
     {
+        private string label;
+        private string value;
+
+        public event Action<string>? ValueChanged;
+
+        public Textbox(string label, string value)
+        {
+            this.label = label;
+            this.value = value;
+        }
+
         public void Draw()
         {
-            throw new NotImplementedException();
+            
         }
 
         public void HandleKey(ConsoleKeyInfo info)

@@ -9,7 +9,7 @@ namespace Editor.Components.Non_WindowComponents
     {
         Dictionary<ConsoleKey, Action> keys = new Dictionary<ConsoleKey, Action>();
         public event Action<BackupJob>? IsSelected;
-        public event Action<BackupJob>? DeletePending;
+        public event Action? DeletePending;
         private BackupJob job;
 
         public JobPreview(BackupJob job)
@@ -40,12 +40,12 @@ namespace Editor.Components.Non_WindowComponents
 
         private void Selected()
         {
-            this.IsSelected?.Invoke(job!);
+            this.IsSelected?.Invoke(job);
         }
 
         private void Delete()
         {
-            this.DeletePending?.Invoke(job!);
+            this.DeletePending?.Invoke();
         }
     }
 }

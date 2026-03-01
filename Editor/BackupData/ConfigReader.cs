@@ -5,6 +5,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using System.Xml;
 using Editor.BackupData.Job;
 using Newtonsoft.Json;
 using JsonException = Newtonsoft.Json.JsonException;
@@ -13,7 +14,7 @@ namespace Editor.BackupData
 {
     public class ConfigReader
     {
-        private const string FILE = @"D:\config.json";
+        private const string FILE = @"D:\\config.json";
 
         public List<BackupJob> PrepareJobs()
         {
