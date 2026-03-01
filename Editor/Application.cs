@@ -8,6 +8,7 @@ using Editor.Components.Windows;
 
 namespace Editor
 {
+    //┌┐─│└┘
     public class Application
     {
         private Stack<Window> windowsInUse = new Stack<Window>();
@@ -15,20 +16,22 @@ namespace Editor
         public List<BackupJob> Jobs = new List<BackupJob>();
 
         public Application()
-        { 
-            ConfigReader reader = new ConfigReader();
-            this.Jobs = reader.PrepareJobs();
-
-            this.CreateWindow(new WindowChoose());
+        {
+            Console.CursorVisible = false;
+            this.CreateWindow(new WindowList());
         }
 
         public void Run()
         {
             while (!turnOff)
             {
+                this.windowsInUse.Peek().Draw();
+
                 ConsoleKeyInfo info = Console.ReadKey();
 
                 this.windowsInUse.Peek().HandleKey(info);
+
+                Console.Clear();
             }
         }
 
