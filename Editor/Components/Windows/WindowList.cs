@@ -11,8 +11,8 @@ namespace Editor.Components.Windows
 {
     public class WindowList : Window
     {
-        private List<BackupJob> backupJobs;
         private int selectedPreview = 0;
+        private List<BackupJob> backupJobs;
         private List<Preview> previews = new List<Preview>();
         private Dictionary<ConsoleKey, Action> keys = new Dictionary<ConsoleKey, Action>();
 
@@ -64,7 +64,7 @@ namespace Editor.Components.Windows
         /// KEY HANDLING
         public override void HandleKey(ConsoleKeyInfo keyInfo)
         {
-            if (keys.ContainsKey(keyInfo.Key))
+            if (this.keys.ContainsKey(keyInfo.Key))
             {
                 this.keys[keyInfo.Key].Invoke();
             }

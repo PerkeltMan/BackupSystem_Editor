@@ -4,13 +4,13 @@ using Editor.Components.Windows;
 
 namespace Editor.Model
 {
-    //┌┐─│└┘
     public class Application
     {
-        public Stack<Window> WindowsInUse = new Stack<Window>();
-        public List<BackupJob> Jobs = new List<BackupJob>();
         private bool turnOff = false;
         private ConfigFileManipulation configManipulator;
+        public Stack<Window> WindowsInUse = new Stack<Window>();
+        public List<BackupJob> Jobs = new List<BackupJob>();
+
         public Application()
         {
             this.configManipulator = new ConfigFileManipulation();
@@ -22,7 +22,7 @@ namespace Editor.Model
 
         public void Run()
         {
-            while (!turnOff)
+            while (!this.turnOff)
             {
                 this.WindowsInUse.Peek().Draw();
 
@@ -42,20 +42,20 @@ namespace Editor.Model
         public void DeleteJob(int index)
         {
             this.Jobs.RemoveAt(index);
-            configManipulator.SaveJobs(this.Jobs);
+            this.configManipulator.SaveJobs(this.Jobs);
         }
 
         public void EditJob(BackupJob job, int index)
         {
             this.Jobs[index] = job;
-            configManipulator.SaveJobs(this.Jobs);
+            this.configManipulator.SaveJobs(this.Jobs);
         }
 
         public void AddJob(BackupJob job)
         {
             job.ID = this.Jobs.Count;
             this.Jobs.Add(job);
-            configManipulator.SaveJobs(this.Jobs);
+            this.configManipulator.SaveJobs(this.Jobs);
         }
 
         public void CreateWindow(Window window)

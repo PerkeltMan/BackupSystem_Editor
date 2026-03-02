@@ -12,13 +12,13 @@ namespace Editor.Components.Windows.Editing
 {
     public class WindowEdit : Window
     {
-        private BackupJob job;
         private int jobID;
         private int selectedComponent = 0;
+        private BackupJob job;
         private Dictionary<ConsoleKey, Action> keys = new Dictionary<ConsoleKey, Action>();
-        public event Action<BackupJob>? SaveAction;
-
         private List<IComponent> components = new List<IComponent>();
+
+        public event Action<BackupJob>? SaveAction;
 
         public WindowEdit(BackupJob job, int jobID, Action<BackupJob>? saveAction)
         {

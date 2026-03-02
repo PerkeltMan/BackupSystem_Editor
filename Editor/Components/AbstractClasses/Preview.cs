@@ -9,7 +9,6 @@ namespace Editor.Components.AbstractClasses
     {
         public abstract void Draw();
 
-
         public abstract void HandleKey(ConsoleKeyInfo info);
     }
 }

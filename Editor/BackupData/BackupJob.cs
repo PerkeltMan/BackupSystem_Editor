@@ -19,14 +19,14 @@ namespace Editor.BackupData
         [JsonProperty("Targets")]
         public List<string> Targets = new List<string>();
 
-        [JsonProperty("Method")] 
+        [JsonProperty("Method")]
         public string Method { get; set; } = string.Empty;
 
         [JsonProperty("Timing")]
         public string Timing { get; set; } = string.Empty;
 
         [JsonProperty("Retention")]
-        public Retention Retention {  get; set; }
+        public Retention Retention { get; set; }
 
         public BackupJob(Retention retention)
         {
@@ -36,7 +36,7 @@ namespace Editor.BackupData
 
         public BackupJob()
         {
-            Retention retention = new Retention() {Size = 0, Count = 0, BackupJob = this };
+            Retention retention = new Retention() { Size = 0, Count = 0, BackupJob = this };
             this.Retention = retention;
         }
     }
