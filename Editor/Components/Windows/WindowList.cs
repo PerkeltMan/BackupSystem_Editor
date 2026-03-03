@@ -11,20 +11,14 @@ namespace Editor.Components.Windows
 {
     public class WindowList : Window
     {
-        private int selectedPreview = 0;
         private List<BackupJob> backupJobs;
-        private List<Preview> previews = new List<Preview>();
-        private Dictionary<ConsoleKey, Action> keys = new Dictionary<ConsoleKey, Action>();
-
         public WindowList(List<BackupJob> jobs)
         {
             this.backupJobs = jobs;
 
             this.UpdatePreviews();
 
-            this.keys[ConsoleKey.UpArrow] = this.KeyUp;
-            this.keys[ConsoleKey.DownArrow] = this.KeyDown;
-            this.keys[ConsoleKey.Escape] = this.Leave;
+            this.Keys[ConsoleKey.Escape] = this.Leave;
         }
 
         public void UpdatePreviews()
@@ -37,56 +31,21 @@ namespace Editor.Components.Windows
                 jobPrev.IsSelected += this.SelectJob;
                 jobPrev.DeletePending += this.Delete;
 
-                previews.Add(jobPrev);
+                this.Components.Add(jobPrev);
             }
 
             AddPreview addPrev = new AddPreview();
             addPrev.NewJob += this.CreateNewJob;
-            previews.Add(addPrev);
 
-            this.previews = previews;
-        }
-
-        public override void Draw()
-        {
-            for (int i = 0; i < this.previews.Count; i++)
-            {
-                if (i == this.selectedPreview)
-                {
-                    Console.ForegroundColor = ConsoleColor.Green;
-                }
-
-                this.previews[i].Draw();
-                Console.ResetColor();
-            }
-        }
-
-        /// KEY HANDLING
-        public override void HandleKey(ConsoleKeyInfo keyInfo)
-        {
-            if (this.keys.ContainsKey(keyInfo.Key))
-            {
-                this.keys[keyInfo.Key].Invoke();
-            }
-            else this.previews[selectedPreview].HandleKey(keyInfo);
-        }
-
-        private void KeyUp()
-        {
-            this.selectedPreview = Math.Max(--this.selectedPreview, 0);
-        }
-
-        private void KeyDown()
-        {
-            this.selectedPreview = Math.Min(++this.selectedPreview, this.previews.Count - 1);
+            this.Components.Add(addPrev);
         }
 
         /// WINDOWS CREATION 
         private void SelectJob(BackupJob job)
         {
-            WindowEdit windowEdit = new WindowEdit(job, this.selectedPreview, (editedJob) =>
+            WindowEdit windowEdit = new WindowEdit(job, this.SelectedComponent, (editedJob) =>
             {
-                this.Application.EditJob(editedJob, this.selectedPreview);
+                this.Application.EditJob(editedJob, this.SelectedComponent);
             });
 
             this.Application.CreateWindow(windowEdit);
@@ -111,7 +70,7 @@ namespace Editor.Components.Windows
 
             choose.Confirm += () =>
             {
-                this.Application.DeleteJob(this.selectedPreview);
+                this.Application.DeleteJob(this.SelectedComponent);
                 this.UpdatePreviews();
                 this.Application.WindowsInUse.Pop();
             };

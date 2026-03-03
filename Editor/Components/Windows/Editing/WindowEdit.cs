@@ -15,7 +15,6 @@ namespace Editor.Components.Windows.Editing
         private int jobID;
         private int selectedComponent = 0;
         private BackupJob job;
-        private Dictionary<ConsoleKey, Action> keys = new Dictionary<ConsoleKey, Action>();
         private List<IComponent> components = new List<IComponent>();
 
         public event Action<BackupJob>? SaveAction;
@@ -69,14 +68,14 @@ namespace Editor.Components.Windows.Editing
             Button sourceButton = new Button("Source");
             sourceButton.Clicked += () =>
             {
-                this.Application.CreateWindow(new WindowPathChanging(this.job.Sources));
+                //this.Application.CreateWindow(new WindowPathChanging(this.job.Sources));
             };
             this.components.Add(sourceButton);
 
             Button targetButton = new Button("Destination");
             targetButton.Clicked += () =>
             {
-                this.Application.CreateWindow(new WindowPathChanging(this.job.Targets));
+                //this.Application.CreateWindow(new WindowPathChanging(this.job.Targets));
             };
             this.components.Add(targetButton);
 
@@ -106,46 +105,6 @@ namespace Editor.Components.Windows.Editing
                 this.Application.WindowsInUse.Pop();
             };
             this.components.Add(btnCancel);
-
-            this.keys.Add(ConsoleKey.UpArrow, this.KeyUp);
-            this.keys.Add(ConsoleKey.DownArrow, this.KeyDown);
-        }
-
-
-        public override void Draw()
-        {
-            for (int i = 0; i < this.components.Count; i++)
-            {
-                if (i == this.selectedComponent)
-                {
-                    Console.ForegroundColor = ConsoleColor.Green;
-                }
-
-                this.components[i].Draw();
-                Console.ResetColor();
-            }
-        }
-
-        public override void HandleKey(ConsoleKeyInfo keyInfo)
-        {
-            if (this.keys.ContainsKey(keyInfo.Key))
-            {
-                this.keys[keyInfo.Key]();
-            }
-            else
-            {
-                this.components[this.selectedComponent].HandleKey(keyInfo);
-            }
-        }
-
-        private void KeyUp()
-        {
-            this.selectedComponent = Math.Max(--this.selectedComponent, 0);
-        }
-
-        private void KeyDown()
-        {
-            this.selectedComponent = Math.Min(++this.selectedComponent, this.components.Count - 1);
         }
     }
 }
