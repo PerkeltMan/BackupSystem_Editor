@@ -8,12 +8,12 @@ namespace Editor.Model
     {
         private bool turnOff = false;
         private ConfigFileManipulation configManipulator;
-        public Stack<Window> WindowsInUse = new Stack<Window>();
-        public List<BackupJob> Jobs = new List<BackupJob>();
+        public Stack<Window> WindowsInUse = new();
+        public List<BackupJob> Jobs = new();
 
         public Application()
         {
-            this.configManipulator = new ConfigFileManipulation();
+            this.configManipulator = new();
             this.Jobs = configManipulator.PrepareJobs();
 
             this.CreateWindow(new WindowList(this.Jobs));

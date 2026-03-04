@@ -4,7 +4,7 @@ namespace Editor
 {
     internal class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
             Application app = new Application();
             app.Run();

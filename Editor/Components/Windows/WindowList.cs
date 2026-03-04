@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Editor.BackupData;
+﻿using Editor.BackupData;
 using Editor.Components.AbstractClasses;
 using Editor.Components.Non_WindowComponents;
-using Editor.Components.Windows.Editing;
-using Editor.Model;
 
 namespace Editor.Components.Windows
 {
-    public class WindowList : Window
+    public class WindowList : WindowScroll
     {
         private List<BackupJob> backupJobs;
+
         public WindowList(List<BackupJob> jobs)
         {
             this.backupJobs = jobs;
@@ -23,11 +19,13 @@ namespace Editor.Components.Windows
 
         public void UpdatePreviews()
         {
+            this.Components.Clear();
+
             for (int i = 0; i < this.backupJobs.Count; i++)
             {
                 JobPreview jobPrev = new JobPreview(this.backupJobs[i]);
-                jobPrev.IsSelected += this.SelectJob;
-                jobPrev.DeletePending += this.Delete;
+                jobPrev.GotSelected += this.SelectJob;
+                jobPrev.DeleteRequested += this.Delete;
 
                 this.Components.Add(jobPrev);
             }
@@ -55,7 +53,7 @@ namespace Editor.Components.Windows
             {
                 this.Application.AddJob(newJob);
                 this.UpdatePreviews();
-            });
+            });    
 
             this.Application.CreateWindow(windowEdit);
         }

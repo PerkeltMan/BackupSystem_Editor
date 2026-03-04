@@ -5,7 +5,7 @@ namespace Editor.Components.Windows
 {
     public class WindowChoose : Window
     {
-        private string _message;
+        private string message;
 
         public event Action? Confirm;
         public event Action? Cancel;
@@ -22,12 +22,12 @@ namespace Editor.Components.Windows
             btnCancel.Clicked += BtnCancel_Clicked;
             this.Components.Add(btnCancel);
 
-            this._message = text;
+            this.message = text;
         }
 
         public override void Draw()
         {
-            Console.WriteLine(this._message);
+            Console.WriteLine(this.message);
             
             base.Draw();
         }

@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Text.Json;
-using System.Threading.Tasks;
-using System.Xml;
-using Editor.BackupData;
+﻿using Editor.BackupData;
 using Newtonsoft.Json;
 using Formatting = Newtonsoft.Json.Formatting;
 using JsonException = Newtonsoft.Json.JsonException;
@@ -27,20 +19,11 @@ namespace Editor.Model
                 {
                     string allText = sr.ReadToEnd();
 
-                    List<BackupJob>? jobs = JsonConvert.DeserializeObject<List<BackupJob>>(allText);
-
-                    if (jobs == null)
-                    {
-                        throw new Exception("there are no backup jobs in config");
-                    }
+                    List<BackupJob>? jobs = JsonConvert.DeserializeObject<List<BackupJob>>(allText) ?? throw new Exception("there are no backup jobs in config");
 
                     //fills BackupJob list in BackupService
                     foreach (BackupJob job in jobs)
                     {
-                        if (job.Sources == null || job.Sources.Count == 0 || job.Targets == null || job.Targets.Count == 0)
-                        {
-                            throw new Exception($"Backup job {jobs.IndexOf(job) + 1} is missing at least one source or at least one destination");
-                        }
 
                         //better safe than sorry
                         if (job.Method == "full")

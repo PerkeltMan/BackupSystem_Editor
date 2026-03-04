@@ -8,14 +8,12 @@ using Editor.Components.Components;
 using Editor.Components.Interfaces;
 using Editor.Components.Non_WindowComponents;
 
-namespace Editor.Components.Windows.Editing
+namespace Editor.Components.Windows
 {
-    public class WindowEdit : Window
+    public class WindowEdit : WindowScroll
     {
         private int jobID;
-        private int selectedComponent = 0;
         private BackupJob job;
-        private List<IComponent> components = new List<IComponent>();
 
         public event Action<BackupJob>? SaveAction;
 
@@ -25,22 +23,18 @@ namespace Editor.Components.Windows.Editing
             this.jobID = jobID;
             this.SaveAction = saveAction;
 
-            List<Textbox> textboxes = new List<Textbox>();
-            textboxes.Add(new Textbox("Name", job.Name));
-            textboxes.Add(new Textbox("Method", job.Method));
-            textboxes.Add(new Textbox("Schedule", job.Timing));
-            textboxes.Add(new Textbox("Count", job.Retention.Count.ToString()));
-            textboxes.Add(new Textbox("Size", job.Retention.Size.ToString()));
+            this.Components.Add(new Textbox("Name", job.Name));
+            this.Components.Add(new Textbox("Method", job.Method));
+            this.Components.Add(new Textbox("Schedule", job.Timing));
+            this.Components.Add(new Textbox("Count", job.Retention.Count.ToString()));
+            this.Components.Add(new Textbox("Size", job.Retention.Size.ToString()));
 
-            foreach (Textbox textbox in textboxes)
+            foreach (Textbox box in this.Components)
             {
-                Textbox captured = textbox;
-
-                captured.ValueChanged += (newValue) =>
+                box.ValueChanged += (newValue) =>
                 {
-                    captured.Value = newValue;
-
-                    switch (captured.Label)
+                    box.Value = newValue;
+                    switch (box.Label)
                     {
                         case "Name":
                             this.job.Name = newValue;
@@ -61,8 +55,6 @@ namespace Editor.Components.Windows.Editing
                             break;
                     }
                 };
-
-                this.components.Add((IComponent)captured);
             }
 
             Button sourceButton = new Button("Source");
@@ -70,14 +62,14 @@ namespace Editor.Components.Windows.Editing
             {
                 //this.Application.CreateWindow(new WindowPathChanging(this.job.Sources));
             };
-            this.components.Add(sourceButton);
+            this.Components.Add(sourceButton);
 
             Button targetButton = new Button("Destination");
             targetButton.Clicked += () =>
             {
                 //this.Application.CreateWindow(new WindowPathChanging(this.job.Targets));
             };
-            this.components.Add(targetButton);
+            this.Components.Add(targetButton);
 
             Button btnSAve = new Button("Save");
             btnSAve.Clicked += () =>
@@ -97,14 +89,14 @@ namespace Editor.Components.Windows.Editing
 
                 this.Application.CreateWindow(confirm);
             };
-            this.components.Add(btnSAve);
+            this.Components.Add(btnSAve);
 
             Button btnCancel = new Button("Cancel");
             btnCancel.Clicked += () =>
             {
                 this.Application.WindowsInUse.Pop();
             };
-            this.components.Add(btnCancel);
+            this.Components.Add(btnCancel);
         }
     }
 }

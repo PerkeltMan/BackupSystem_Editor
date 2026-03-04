@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Text.Json.Serialization;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace Editor.BackupData
 {
@@ -14,11 +10,10 @@ namespace Editor.BackupData
         public string Name { get; set; } = string.Empty;
 
         [JsonProperty("Sources")]
-        public List<string> Sources = new List<string>();
+        public List<string> Sources = new();
 
         [JsonProperty("Targets")]
-        public List<string> Targets = new List<string>();
-
+        public List<string> Targets = new();
         [JsonProperty("Method")]
         public string Method { get; set; } = string.Empty;
 
@@ -26,6 +21,6 @@ namespace Editor.BackupData
         public string Timing { get; set; } = string.Empty;
 
         [JsonProperty("Retention")]
-        public Retention Retention { get; set; } = new Retention() { Size = 0, Count = 0 };
+        public Retention Retention { get; set; } = new();
     }
 }

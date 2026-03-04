@@ -10,7 +10,7 @@ namespace Editor.Components.Components
     {
         public string Value;
         public string Label;
-        private Dictionary<ConsoleKey, Action> keys = new Dictionary<ConsoleKey, Action>();
+        private Dictionary<ConsoleKey, Action> keys = new();
 
         public event Action<string>? ValueChanged;
 

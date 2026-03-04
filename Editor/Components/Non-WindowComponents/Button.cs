@@ -1,22 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Editor.Components.Interfaces;
+﻿using Editor.Components.Interfaces;
 
 namespace Editor.Components.Components
 {
     public class Button : IComponent
     {
-        public string Text;
+        private string text;
         public event Action? Clicked;
-        public Button(string text)
-        {
-            this.Text = text;
-        }
+
+        public Button(string text) => this.text = text;
 
         public void Draw()
         {
-            Console.WriteLine($"[ {this.Text} ]");
+            Console.WriteLine($"[ {this.text} ]");
         }
 
         public void HandleKey(ConsoleKeyInfo info)

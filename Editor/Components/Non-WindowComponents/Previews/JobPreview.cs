@@ -8,10 +8,11 @@ namespace Editor.Components.Non_WindowComponents
 {
     public class JobPreview : Preview
     {
-        Dictionary<ConsoleKey, Action> keys = new Dictionary<ConsoleKey, Action>();
-        public event Action<BackupJob>? IsSelected;
-        public event Action? DeletePending;
         private BackupJob job;
+        Dictionary<ConsoleKey, Action> keys = new();
+
+        public event Action<BackupJob>? GotSelected;
+        public event Action? DeleteRequested;
 
         public JobPreview(BackupJob job)
         {
@@ -41,12 +42,12 @@ namespace Editor.Components.Non_WindowComponents
 
         private void Selected()
         {
-            this.IsSelected?.Invoke(job);
+            this.GotSelected?.Invoke(this.job);
         }
 
         private void Delete()
         {
-            this.DeletePending?.Invoke();
+            this.DeleteRequested?.Invoke();
         }
     }
 }
