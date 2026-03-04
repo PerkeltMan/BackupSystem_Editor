@@ -1,0 +1,20 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using Editor.Components.AbstractClasses;
+
+namespace Editor.Components.Windows
+{
+    public class WindowAdd : Window
+    {
+        public override void Draw()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void HandleKey(ConsoleKeyInfo keyInfo)
+        {
+            throw new NotImplementedException();
+        }
+    }
+}

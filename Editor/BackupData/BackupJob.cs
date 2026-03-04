@@ -26,18 +26,6 @@ namespace Editor.BackupData
         public string Timing { get; set; } = string.Empty;
 
         [JsonProperty("Retention")]
-        public Retention Retention { get; set; }
-
-        public BackupJob(Retention retention)
-        {
-            this.Retention = retention;
-            this.Retention.BackupJob = this;
-        }
-
-        public BackupJob()
-        {
-            Retention retention = new Retention() { Size = 0, Count = 0, BackupJob = this };
-            this.Retention = retention;
-        }
+        public Retention Retention { get; set; } = new Retention() { Size = 0, Count = 0 };
     }
 }
