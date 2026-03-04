@@ -23,8 +23,6 @@ namespace Editor.Components.Windows
 
         public void UpdatePreviews()
         {
-            List<Preview> previews = new List<Preview>();
-
             for (int i = 0; i < this.backupJobs.Count; i++)
             {
                 JobPreview jobPrev = new JobPreview(this.backupJobs[i]);
