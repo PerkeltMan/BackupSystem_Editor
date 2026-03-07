@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Editor.BackupData;
-using Editor.Components.AbstractClasses;
+﻿using Editor.BackupData;
+using IComponent = Editor.Components.Interfaces.IComponent;
 
 namespace Editor.Components.Non_WindowComponents
 {
-    public class JobPreview : Preview
+    public class JobPreview : IComponent
     {
         private BackupJob job;
         Dictionary<ConsoleKey, Action> keys = new();
@@ -22,7 +19,7 @@ namespace Editor.Components.Non_WindowComponents
             this.keys[ConsoleKey.Q] = this.Delete;
         }
 
-        public override void Draw()
+        public void Draw()
         {
             Console.Write($"""
                 ┌{"".PadRight(Console.WindowWidth - 2, '─')}┐
@@ -32,7 +29,7 @@ namespace Editor.Components.Non_WindowComponents
                 );
         }
 
-        public override void HandleKey(ConsoleKeyInfo info)
+        public void HandleKey(ConsoleKeyInfo info)
         {
             if (this.keys.ContainsKey(info.Key))
             {

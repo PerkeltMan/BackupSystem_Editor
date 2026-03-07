@@ -1,5 +1,4 @@
-﻿using System.Text;
-using Editor.Components.AbstractClasses;
+﻿using Editor.Components.AbstractClasses;
 using Editor.Components.Components;
 
 namespace Editor.Components.Windows
@@ -10,6 +9,7 @@ namespace Editor.Components.Windows
 
         private string message;
 
+        // using params here is essentialy just a pretty List<IComponent>
         public WindowChoose(string text, params (string label, Action action)[] options)
         {
             this.Keys[ConsoleKey.Tab] = Tab;

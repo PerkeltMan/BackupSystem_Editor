@@ -12,7 +12,7 @@ namespace Editor.Components.Components
 
         public void Draw()
         {
-            Console.Write($"[ {this.Text} ]");
+            Console.Write($" [ {this.Text} ] ");
         }
 
         public void HandleKey(ConsoleKeyInfo info)

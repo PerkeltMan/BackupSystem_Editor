@@ -1,5 +1,6 @@
 ﻿using Editor.BackupData;
 using Editor.Components.AbstractClasses;
+using Editor.Components.Components;
 using Editor.Components.Non_WindowComponents;
 using Editor.Model;
 
@@ -36,10 +37,10 @@ namespace Editor.Components.Windows
                 this.Components.Add(jobPrev);
             }
 
-            AddPreview addPrev = new AddPreview();
-            addPrev.NewJob += this.CreateNewJob;
+            Button addJob = new Button("add job");
+            addJob.Clicked += this.CreateNewJob;
 
-            this.Components.Add(addPrev);
+            this.Components.Add(addJob);
         }
 
         /// WINDOWS CREATION 
@@ -69,6 +70,7 @@ namespace Editor.Components.Windows
         {
             string deleteMessage = "Are you sure you want to delete this configuration?";
 
+            
             WindowChoose choose = new WindowChoose(deleteMessage,
                 ("Yes", () => { 
                     this.backupJobs.RemoveAt(this.SelectedComponent); 
