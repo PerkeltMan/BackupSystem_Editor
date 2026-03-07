@@ -78,23 +78,23 @@ namespace Editor.Components.Windows
                 confirm.Confirm += () =>
                 {
                     this.SaveAction?.Invoke(this.job);
-                    this.Application.WindowsInUse.Pop();
-                    this.Application.WindowsInUse.Pop();
+                    this.RequestShutWindow();
+                    this.RequestShutWindow();
                 };
                 
                 confirm.Cancel += () =>
                 {
-                    this.Application.WindowsInUse.Pop();
+                    this.RequestShutWindow();
                 };
 
-                this.Application.CreateWindow(confirm);
+                this.RequestCreateWindow(confirm);
             };
             this.Components.Add(btnSAve);
 
             Button btnCancel = new Button("Cancel");
             btnCancel.Clicked += () =>
             {
-                this.Application.WindowsInUse.Pop();
+                this.RequestShutWindow();
             };
             this.Components.Add(btnCancel);
         }

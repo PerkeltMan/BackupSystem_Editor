@@ -1,5 +1,4 @@
-﻿using Editor.BackupData;
-using Editor.Components.AbstractClasses;
+﻿using Editor.Components.AbstractClasses;
 using Editor.Components.Windows;
 
 namespace Editor.Model
@@ -7,16 +6,15 @@ namespace Editor.Model
     public class Application
     {
         private bool turnOff = false;
-        private ConfigFileManipulation configManipulator;
         public Stack<Window> WindowsInUse = new();
-        public List<BackupJob> Jobs = new();
 
         public Application()
         {
-            this.configManipulator = new();
-            this.Jobs = configManipulator.PrepareJobs();
+            this.CreateWindow(new WindowList( () =>
+            {
+                this.TurnOff();
+            }));
 
-            this.CreateWindow(new WindowList(this.Jobs));
             Console.CursorVisible = false;
         }
 
@@ -39,28 +37,15 @@ namespace Editor.Model
             this.turnOff = true;
         }
 
-        public void DeleteJob(int index)
+        public void ShutWindow()
         {
-            this.Jobs.RemoveAt(index);
-            this.configManipulator.SaveJobs(this.Jobs);
-        }
-
-        public void EditJob(BackupJob job, int index)
-        {
-            this.Jobs[index] = job;
-            this.configManipulator.SaveJobs(this.Jobs);
-        }
-
-        public void AddJob(BackupJob job)
-        {
-            job.ID = this.Jobs.Count;
-            this.Jobs.Add(job);
-            this.configManipulator.SaveJobs(this.Jobs);
+            this.WindowsInUse.Pop();
         }
 
         public void CreateWindow(Window window)
         {
-            window.Application = this;
+            window.CreateWindowHandler += this.CreateWindow;
+            window.ShutWindowHandler += this.ShutWindow;
             this.WindowsInUse.Push(window);
         }
     }

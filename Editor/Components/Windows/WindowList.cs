@@ -1,16 +1,22 @@
 ﻿using Editor.BackupData;
 using Editor.Components.AbstractClasses;
 using Editor.Components.Non_WindowComponents;
+using Editor.Model;
 
 namespace Editor.Components.Windows
 {
     public class WindowList : WindowScroll
     {
         private List<BackupJob> backupJobs;
+        private ConfigFileManipulation configFileManipulator = new();
 
-        public WindowList(List<BackupJob> jobs)
+        private event Action turnOff;
+
+        public WindowList(Action turnOff)
         {
-            this.backupJobs = jobs;
+            this.turnOff = turnOff;
+
+            this.backupJobs = configFileManipulator.PrepareJobs();
 
             this.UpdatePreviews();
 
@@ -41,21 +47,22 @@ namespace Editor.Components.Windows
         {
             WindowEdit windowEdit = new WindowEdit(job, this.SelectedComponent, (editedJob) =>
             {
-                this.Application.EditJob(editedJob, this.SelectedComponent);
+                this.backupJobs[this.SelectedComponent] = editedJob;
+                this.SaveChanges();
             });
 
-            this.Application.CreateWindow(windowEdit);
+            this.RequestCreateWindow(windowEdit);
         }
 
         private void CreateNewJob()
         {
-            WindowEdit windowEdit = new WindowEdit(new BackupJob(), this.Application.Jobs.Count, (newJob) =>
+            WindowEdit windowEdit = new WindowEdit(new BackupJob(), this.backupJobs.Count, (newJob) =>
             {
-                this.Application.AddJob(newJob);
-                this.UpdatePreviews();
-            });    
+                this.backupJobs.Add(newJob);
+                this.SaveChanges();
+            });
 
-            this.Application.CreateWindow(windowEdit);
+            this.RequestCreateWindow(windowEdit);
         }
 
         private void Delete()
@@ -66,17 +73,17 @@ namespace Editor.Components.Windows
 
             choose.Confirm += () =>
             {
-                this.Application.DeleteJob(this.SelectedComponent);
-                this.UpdatePreviews();
-                this.Application.WindowsInUse.Pop();
+                this.backupJobs.RemoveAt(this.SelectedComponent);
+                this.SaveChanges();
+                this.RequestShutWindow();
             };
 
             choose.Cancel += () =>
             {
-                this.Application.WindowsInUse.Pop();
+                this.RequestShutWindow();
             };
 
-            this.Application.CreateWindow(choose);
+            this.RequestCreateWindow(choose);
         }
 
         private void Leave()
@@ -87,15 +94,21 @@ namespace Editor.Components.Windows
 
             choose.Confirm += () =>
             {
-                this.Application.TurnOff();
+                this.turnOff.Invoke();
             };
 
             choose.Cancel += () =>
             {
-                this.Application.WindowsInUse.Pop();
+                this.RequestShutWindow();
             };
 
-            this.Application.CreateWindow(choose);
+            this.RequestCreateWindow(choose);
+        }
+
+        private void SaveChanges()
+        {
+            this.configFileManipulator.SaveJobs(this.backupJobs);
+            this.UpdatePreviews();
         }
     }
 }

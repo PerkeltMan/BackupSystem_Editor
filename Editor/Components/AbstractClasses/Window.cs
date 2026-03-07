@@ -5,10 +5,12 @@ namespace Editor.Components.AbstractClasses
 {
     public abstract class Window
     {
-        public Application Application { get; set; } = null!;
         public int SelectedComponent { get; set; } = 0;
         public Dictionary<ConsoleKey, Action> Keys { get; set; } = new();
         public List<IComponent> Components { get; set; } = new();
+
+        public event Action<Window>? CreateWindowHandler;
+        public event Action? ShutWindowHandler;
 
         public void HandleKey(ConsoleKeyInfo keyInfo)
         {
@@ -34,6 +36,16 @@ namespace Editor.Components.AbstractClasses
                 this.Components[i].Draw();
                 Console.ResetColor();
             }
+        }
+
+        protected void RequestCreateWindow(Window window)
+        {
+            this.CreateWindowHandler?.Invoke(window);
+        }
+
+        protected void RequestShutWindow()
+        {
+            this.ShutWindowHandler?.Invoke();
         }
     }
 }
