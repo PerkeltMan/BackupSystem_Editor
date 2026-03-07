@@ -2,16 +2,17 @@
 
 namespace Editor.Components.Components
 {
+    
     public class Button : IComponent
     {
-        private string text;
+        public string Text;
         public event Action? Clicked;
 
-        public Button(string text) => this.text = text;
+        public Button(string text) => this.Text = text;
 
         public void Draw()
         {
-            Console.WriteLine($"[ {this.text} ]");
+            Console.Write($"[ {this.Text} ]");
         }
 
         public void HandleKey(ConsoleKeyInfo info)
@@ -20,6 +21,11 @@ namespace Editor.Components.Components
             {
                 this.Clicked?.Invoke();
             }
+        }
+
+        public override string ToString()
+        {
+            return this.Text;
         }
     }
 }

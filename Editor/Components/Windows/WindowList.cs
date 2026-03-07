@@ -7,14 +7,14 @@ namespace Editor.Components.Windows
 {
     public class WindowList : WindowScroll
     {
-        private List<BackupJob> backupJobs;
+        private List<BackupJob> backupJobs = new();
         private ConfigFileManipulation configFileManipulator = new();
 
-        private event Action turnOff;
+        private event Action TurnOff;
 
         public WindowList(Action turnOff)
         {
-            this.turnOff = turnOff;
+            this.TurnOff = turnOff;
 
             this.backupJobs = configFileManipulator.PrepareJobs();
 
@@ -69,19 +69,14 @@ namespace Editor.Components.Windows
         {
             string deleteMessage = "Are you sure you want to delete this configuration?";
 
-            WindowChoose choose = new WindowChoose(deleteMessage);
-
-            choose.Confirm += () =>
-            {
-                this.backupJobs.RemoveAt(this.SelectedComponent);
-                this.SaveChanges();
-                this.RequestShutWindow();
-            };
-
-            choose.Cancel += () =>
-            {
-                this.RequestShutWindow();
-            };
+            WindowChoose choose = new WindowChoose(deleteMessage,
+                ("Yes", () => { 
+                    this.backupJobs.RemoveAt(this.SelectedComponent); 
+                    this.SaveChanges();  
+                    this.RequestShutWindow(); 
+                }),
+                ("No", () => this.RequestShutWindow())
+                );
 
             this.RequestCreateWindow(choose);
         }
@@ -90,19 +85,12 @@ namespace Editor.Components.Windows
         {
             string leaveMessage = "Are you sure you want to leave?";
 
-            WindowChoose choose = new WindowChoose(leaveMessage);
+            WindowChoose leaveWindow = new WindowChoose(leaveMessage,
+                ("Yes", () => this.TurnOff.Invoke()),
+                ("No", () => this.RequestShutWindow())
+                );
 
-            choose.Confirm += () =>
-            {
-                this.turnOff.Invoke();
-            };
-
-            choose.Cancel += () =>
-            {
-                this.RequestShutWindow();
-            };
-
-            this.RequestCreateWindow(choose);
+            this.RequestCreateWindow(leaveWindow);
         }
 
         private void SaveChanges()

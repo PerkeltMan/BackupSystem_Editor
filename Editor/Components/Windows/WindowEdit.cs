@@ -12,7 +12,7 @@ namespace Editor.Components.Windows
 {
     public class WindowEdit : WindowScroll
     {
-        private int jobID;
+        //private int jobID;
         private BackupJob job;
 
         public event Action<BackupJob>? SaveAction;
@@ -20,7 +20,7 @@ namespace Editor.Components.Windows
         public WindowEdit(BackupJob job, int jobID, Action<BackupJob>? saveAction)
         {
             this.job = job;
-            this.jobID = jobID;
+            //this.jobID = jobID;
             this.SaveAction = saveAction;
 
             this.Components.Add(new Textbox("Name", job.Name));
@@ -56,6 +56,19 @@ namespace Editor.Components.Windows
                     }
                 };
             }
+
+            Textbox textboxName = new Textbox("Name", this.job.Name);
+            textboxName.ValueChanged += (newValue) =>
+            {
+                this.job.Name = newValue;
+            };
+            this.Components.Add(textboxName);
+
+            Button methodButton = new Button("Method");
+            methodButton.Clicked += () =>
+            {
+                this.RequestCreateWindow(new WindowChoose("Choose a method"));             
+            };
 
             Button sourceButton = new Button("Source");
             sourceButton.Clicked += () =>

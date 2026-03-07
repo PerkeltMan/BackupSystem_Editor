@@ -22,6 +22,12 @@ namespace Editor.Model
         {
             while (!this.turnOff)
             {
+                //foreach (Window window in this.WindowsInUse.Reverse())
+                //{
+                //    Console.SetCursorPosition(0, 0);
+                //    window.Draw();
+                //}
+
                 this.WindowsInUse.Peek().Draw();
 
                 ConsoleKeyInfo info = Console.ReadKey();

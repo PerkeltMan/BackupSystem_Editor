@@ -24,7 +24,6 @@ namespace Editor.Model
                     //fills BackupJob list in BackupService
                     foreach (BackupJob job in jobs)
                     {
-
                         //better safe than sorry
                         if (job.Method == "full")
                         {
