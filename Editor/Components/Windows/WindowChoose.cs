@@ -17,8 +17,7 @@ namespace Editor.Components.Windows
 
             foreach (var option in options)
             {
-                Button button = new Button(option.label);
-                button.Clicked += option.action;
+                Button button = new Button(option.label, option.action);
                 this.Components.Add(button);
             }
         }

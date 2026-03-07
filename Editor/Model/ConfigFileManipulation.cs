@@ -7,7 +7,7 @@ namespace Editor.Model
 {
     public class ConfigFileManipulation
     {
-        private const string FILE = @"D:\\config.json";
+        private const string FILE = @"D:\\config2.json";
 
         public List<BackupJob> PrepareJobs()
         {
@@ -19,7 +19,15 @@ namespace Editor.Model
                 {
                     string allText = sr.ReadToEnd();
 
-                    List<BackupJob>? jobs = JsonConvert.DeserializeObject<List<BackupJob>>(allText) ?? throw new Exception("there are no backup jobs in config");
+                    List<BackupJob>? jobs = JsonConvert.DeserializeObject<List<BackupJob>>(allText); //?? throw new Exception("there are no backup jobs in config");
+
+                    if (jobs == null)
+                    {
+                        return result;
+                    }
+
+                    //Console.WriteLine("Loading jobs...");
+                    //Console.WriteLine(File.ReadAllText(FILE));
 
                     //fills BackupJob list in BackupService
                     foreach (BackupJob job in jobs)

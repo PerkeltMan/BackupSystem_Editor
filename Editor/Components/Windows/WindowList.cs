@@ -37,8 +37,7 @@ namespace Editor.Components.Windows
                 this.Components.Add(jobPrev);
             }
 
-            Button addJob = new Button("add job");
-            addJob.Clicked += this.CreateNewJob;
+            Button addJob = new Button("add job", () => this.CreateNewJob());
 
             this.Components.Add(addJob);
         }

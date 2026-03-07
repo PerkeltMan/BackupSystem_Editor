@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Editor.Components.AbstractClasses;
-using Editor.Components.Interfaces;
+﻿using Editor.Components.Interfaces;
 
 namespace Editor.Components.Components
 {
@@ -14,10 +10,11 @@ namespace Editor.Components.Components
 
         public event Action<string>? ValueChanged;
 
-        public Textbox(string label, string value)
+        public Textbox(string label, string value, Action<string> valueChanged)
         {
             this.Value = value;
             this.Label = label;
+            this.ValueChanged = valueChanged;
 
             this.keys[ConsoleKey.Backspace] = this.Backspace;
             this.keys[ConsoleKey.Enter] = this.Enter;
@@ -26,7 +23,7 @@ namespace Editor.Components.Components
         public void Draw()
         {
             Console.WriteLine(this.Label);
-            Console.WriteLine("[ " + this.Value);
+            Console.WriteLine("    " + this.Value);
         }
 
         public void HandleKey(ConsoleKeyInfo info)

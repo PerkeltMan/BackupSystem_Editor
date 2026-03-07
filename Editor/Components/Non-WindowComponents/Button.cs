@@ -5,14 +5,18 @@ namespace Editor.Components.Components
     
     public class Button : IComponent
     {
-        public string Text;
+        private string text;
         public event Action? Clicked;
 
-        public Button(string text) => this.Text = text;
+        public Button(string text, Action clicked)
+        {
+            this.text = text;
+            this.Clicked = clicked;
+        }
 
         public void Draw()
         {
-            Console.Write($" [ {this.Text} ] ");
+            Console.WriteLine($" [ {this.text} ] ");
         }
 
         public void HandleKey(ConsoleKeyInfo info)
@@ -25,7 +29,7 @@ namespace Editor.Components.Components
 
         public override string ToString()
         {
-            return this.Text;
+            return this.text;
         }
     }
 }
