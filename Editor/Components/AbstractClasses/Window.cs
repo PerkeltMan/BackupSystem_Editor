@@ -1,4 +1,5 @@
-﻿using Editor.Components.Interfaces;
+﻿using System.Net.Security;
+using Editor.Components.Interfaces;
 using Editor.Model;
 
 namespace Editor.Components.AbstractClasses
@@ -7,10 +8,19 @@ namespace Editor.Components.AbstractClasses
     {
         public int SelectedComponent { get; set; } = 0;
         public Dictionary<ConsoleKey, Action> Keys { get; set; } = new();
+        //public Dictionary<(int x, int y) IComponent> Components = new();
+        public IComponent[,] ComponentDrawing { get; set; } = new IComponent[,] { };
         public List<IComponent> Components { get; set; } = new();
 
         public event Action<Window>? CreateWindowHandler;
         public event Action? ShutWindowHandler;
+
+        protected Window()
+        {
+            //this.Keys[ConsoleKey.UpArrow] = this.KeyUp;
+            //this.Keys[ConsoleKey.RightArrow] = this.;
+            
+        }
 
         public void HandleKey(ConsoleKeyInfo keyInfo)
         {
@@ -20,7 +30,22 @@ namespace Editor.Components.AbstractClasses
             }
             else
             {
-                this.Components[this.SelectedComponent].HandleKey(keyInfo);
+                if (this.Components.Count > 0)
+                    this.Components[this.SelectedComponent].HandleKey(keyInfo);
+            }
+        }
+
+        // 3 may seem random, but 
+        public void FillLocations()
+        {
+            int width = 3;
+
+            for (int i = 0; i < Components.Count; i++)
+            {
+                int x = i % width;
+                int y = i / width;
+
+                this.ComponentDrawing[x, y] = ComponentDrawing[x, y];
             }
         }
 
@@ -47,5 +72,16 @@ namespace Editor.Components.AbstractClasses
         {
             this.ShutWindowHandler?.Invoke();
         }
+
+        public void KeyUp()
+        {
+            this.SelectedComponent = Math.Max(--this.SelectedComponent, 0);
+        }
+
+        public void KeyDown()
+        {
+            this.SelectedComponent = Math.Min(++this.SelectedComponent, this.Components.Count - 1);
+        }
     }
 }
+

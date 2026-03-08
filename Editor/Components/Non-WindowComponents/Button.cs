@@ -25,6 +25,7 @@ namespace Editor.Components.Components
             {
                 this.Clicked?.Invoke();
             }
+            else return;
         }
 
         public override string ToString()

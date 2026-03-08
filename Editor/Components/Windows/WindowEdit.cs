@@ -16,6 +16,8 @@ namespace Editor.Components.Windows
         {
             this.job = new BackupJob
             {
+                Sources = job.Sources,
+                Targets = job.Targets, 
                 Name = job.Name,
                 Method = job.Method,
                 Timing = job.Timing,
@@ -31,7 +33,7 @@ namespace Editor.Components.Windows
 
             this.Components.Add(new Textbox("Name", this.job.Name, (editedName) => this.job.Name = editedName));
 
-            this.Components.Add(new Button("Method", () =>
+            this.Components.Add(new Button("Method: " + this.job.Method , () =>
             {
                 var options = new (string label, Action action)[]
                 {
@@ -49,8 +51,8 @@ namespace Editor.Components.Windows
             RetentionBoxes("Package size", this.job.Retention.Size, newValue => this.job.Retention.Size = newValue);
             RetentionBoxes("Package count", this.job.Retention.Count, newValue => this.job.Retention.Count = newValue);
 
-            this.Components.Add(new Button("Sources", () => Console.WriteLine("penis"))); //todo
-            this.Components.Add(new Button("Targets", () => Console.Write("penis"))); //todo
+            this.Components.Add(new Button("Sources", () => this.RequestCreateWindow(new WindowPathEditor(this.job.Sources, (sources) => this.job.Sources = sources))));
+            this.Components.Add(new Button("Targets", () => this.RequestCreateWindow(new WindowPathEditor(this.job.Sources, (targets) => this.job.Targets = targets))));
 
             this.Components.Add(new Button("Save", () =>
             {
