@@ -6,7 +6,7 @@ using Editor.Model;
 
 namespace Editor.Components.Windows
 {
-    public class WindowList : WindowScroll
+    public class WindowList : Window
     {
         private List<BackupJob> backupJobs = new();
         private ConfigFileManipulation configFileManipulator = new();
@@ -45,7 +45,7 @@ namespace Editor.Components.Windows
         /// WINDOWS CREATION 
         private void SelectJob(BackupJob job)
         {
-            WindowEdit windowEdit = new WindowEdit(job, this.SelectedComponent, (editedJob) =>
+            WindowEdit windowEdit = new WindowEdit(job, (editedJob) =>
             {
                 this.backupJobs[this.SelectedComponent] = editedJob;
                 this.SaveChanges();
@@ -56,7 +56,7 @@ namespace Editor.Components.Windows
 
         private void CreateNewJob()
         {
-            WindowEdit windowEdit = new WindowEdit(new BackupJob(), this.backupJobs.Count, (newJob) =>
+            WindowEdit windowEdit = new WindowEdit(new BackupJob(), (newJob) =>
             {
                 this.backupJobs.Add(newJob);
                 this.SaveChanges();

@@ -16,7 +16,7 @@ namespace Editor.Components.Components
 
         public void Draw()
         {
-            Console.WriteLine($" [ {this.text} ] ");
+            Console.Write($" [ {this.text} ] ");
         }
 
         public void HandleKey(ConsoleKeyInfo info)

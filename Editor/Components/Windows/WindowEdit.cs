@@ -1,18 +1,21 @@
-﻿using Editor.BackupData;
+﻿using System.ComponentModel;
+using Editor.BackupData;
 using Editor.Components.AbstractClasses;
 using Editor.Components.Components;
+using Editor.Components.Interfaces;
+using IComponent = Editor.Components.Interfaces.IComponent;
 
 namespace Editor.Components.Windows
 {
-    public class WindowEdit : WindowScroll
+    public class WindowEdit : WindowMovable
     {
         //private int jobID;
         private BackupJob job = new BackupJob();
-        private int jobID;
+        //private int jobID;
 
         public event Action<BackupJob>? SaveAction;
 
-        public WindowEdit(BackupJob job, int jobID, Action<BackupJob>? saveAction)
+        public WindowEdit(BackupJob job, Action<BackupJob>? saveAction)
         {
             this.job = new BackupJob
             {
@@ -28,7 +31,6 @@ namespace Editor.Components.Windows
                 }
             };
 
-            this.jobID = jobID;
             this.SaveAction = saveAction;
 
             this.Components.Add(new Textbox("Name", this.job.Name, (editedName) => this.job.Name = editedName));
@@ -64,6 +66,8 @@ namespace Editor.Components.Windows
             ));
 
             this.Components.Add(new Button("Cancel", () => this.RequestShutWindow()));
+
+            this.FillLocations();
         }
 
         private void SetMethod(string method)

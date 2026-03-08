@@ -6,8 +6,6 @@ namespace Editor
     {
         static void Main()
         {
-            Console.WriteLine(0 % 3);
-
             Application app = new Application();
             app.Run();
         }

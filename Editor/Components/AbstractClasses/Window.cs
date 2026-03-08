@@ -6,23 +6,20 @@ namespace Editor.Components.AbstractClasses
 {
     public abstract class Window
     {
-        public int SelectedComponent { get; set; } = 0;
-        public Dictionary<ConsoleKey, Action> Keys { get; set; } = new();
-        //public Dictionary<(int x, int y) IComponent> Components = new();
-        public IComponent[,] ComponentDrawing { get; set; } = new IComponent[,] { };
+        public int SelectedComponent { get; set; }
         public List<IComponent> Components { get; set; } = new();
+        public Dictionary<ConsoleKey, Action> Keys { get; set; } = new();
 
         public event Action<Window>? CreateWindowHandler;
         public event Action? ShutWindowHandler;
 
         protected Window()
         {
-            //this.Keys[ConsoleKey.UpArrow] = this.KeyUp;
-            //this.Keys[ConsoleKey.RightArrow] = this.;
-            
+            this.Keys[ConsoleKey.UpArrow] = this.KeyUp;
+            this.Keys[ConsoleKey.DownArrow] = this.KeyDown;
         }
 
-        public void HandleKey(ConsoleKeyInfo keyInfo)
+        public virtual void HandleKey(ConsoleKeyInfo keyInfo)
         {
             if (this.Keys.ContainsKey(keyInfo.Key))
             {
@@ -35,25 +32,12 @@ namespace Editor.Components.AbstractClasses
             }
         }
 
-        // 3 may seem random, but 
-        public void FillLocations()
-        {
-            int width = 3;
-
-            for (int i = 0; i < Components.Count; i++)
-            {
-                int x = i % width;
-                int y = i / width;
-
-                this.ComponentDrawing[x, y] = ComponentDrawing[x, y];
-            }
-        }
 
         public virtual void Draw()
         {
             for (int i = 0; i < this.Components.Count; i++)
             {
-                if (i == this.SelectedComponent)
+               if (i == this.SelectedComponent)
                 {
                     Console.ForegroundColor = ConsoleColor.Green;
                 }
@@ -73,12 +57,12 @@ namespace Editor.Components.AbstractClasses
             this.ShutWindowHandler?.Invoke();
         }
 
-        public void KeyUp()
+        public virtual void KeyUp()
         {
             this.SelectedComponent = Math.Max(--this.SelectedComponent, 0);
         }
 
-        public void KeyDown()
+        public virtual void KeyDown()
         {
             this.SelectedComponent = Math.Min(++this.SelectedComponent, this.Components.Count - 1);
         }

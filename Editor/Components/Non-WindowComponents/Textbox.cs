@@ -22,8 +22,7 @@ namespace Editor.Components.Components
 
         public void Draw()
         {
-            Console.WriteLine(this.Label);
-            Console.WriteLine("    " + this.Value);
+            Console.Write(this.Label + ": " +  this.Value);
         }
 
         public void HandleKey(ConsoleKeyInfo info)
