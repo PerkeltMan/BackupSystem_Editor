@@ -40,12 +40,15 @@ namespace Editor.Components.Non_WindowComponents
             }
         }
 
-        public void HandleKey(ConsoleKeyInfo info)
+        public bool HandleKey(ConsoleKeyInfo info)
         {
             if (this.keys.ContainsKey(info.Key))
             {
                 this.keys[info.Key].Invoke();
+                return true;
             }
+
+            return false;
         }
 
         private void SelectDirectory()
@@ -65,7 +68,7 @@ namespace Editor.Components.Non_WindowComponents
 
         private void Surface()
         {
-            DirectoryInfo parent = Directory.GetParent(this.currentPath)!;
+            DirectoryInfo? parent = Directory.GetParent(this.currentPath);
 
             if (parent != null)
             {
@@ -75,6 +78,7 @@ namespace Editor.Components.Non_WindowComponents
             else
             {
                 this.directories = Directory.GetLogicalDrives().ToList();
+                this.selectedDirectoryIndex = 0;
             }
         }
 
@@ -82,8 +86,10 @@ namespace Editor.Components.Non_WindowComponents
         {
             if (this.directories.Count == 0)
                 return;
+
             string selectedDirectory = this.directories[this.selectedDirectoryIndex];
             this.selectedDirectoryIndex = 0;
+
             this.currentPath = selectedDirectory;
             this.Load(selectedDirectory);
         }
@@ -103,7 +109,7 @@ namespace Editor.Components.Non_WindowComponents
             }
             catch
             {
-                return;
+                return; //try catch for if the file is private or something like that
             }
         }
     }

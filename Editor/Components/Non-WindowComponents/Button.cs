@@ -19,13 +19,15 @@ namespace Editor.Components.Components
             Console.Write($" [ {this.text} ] ");
         }
 
-        public void HandleKey(ConsoleKeyInfo info)
+        public bool HandleKey(ConsoleKeyInfo info)
         {
             if (info.Key == ConsoleKey.Spacebar)
             {
                 this.Clicked?.Invoke();
+                return true;
             }
-            else return;
+            
+            return false;
         }
 
         public override string ToString()

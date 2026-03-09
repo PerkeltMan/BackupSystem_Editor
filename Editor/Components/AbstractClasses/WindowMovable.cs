@@ -7,7 +7,7 @@ namespace Editor.Components.AbstractClasses
     {
         public int SelectedX { get; set; } = 0;
         public int SelectedY { get; set; } = 0;
-        public int Width { get; set; } = 3;
+        public int Width { get; set; } = 3; //has to be set manually sadly
 
         public Dictionary<(int x, int y), IComponent> GridComponents = new();
 
@@ -30,6 +30,8 @@ namespace Editor.Components.AbstractClasses
                     {
                         Console.ForegroundColor = ConsoleColor.Green;
                     }
+
+                    Console.SetCursorPosition(Console.WindowWidth / this.Width * x, y);
 
                     if (this.GridComponents.TryGetValue((x, y), out IComponent? comp))
                     {

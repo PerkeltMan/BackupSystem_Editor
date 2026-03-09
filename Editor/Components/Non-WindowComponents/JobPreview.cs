@@ -29,12 +29,15 @@ namespace Editor.Components.Non_WindowComponents
                 );
         }
 
-        public void HandleKey(ConsoleKeyInfo info)
+        public bool HandleKey(ConsoleKeyInfo info)
         {
             if (this.keys.ContainsKey(info.Key))
             {
                 this.keys[info.Key].Invoke();
+                return true;
             }
+
+            return false;
         }
 
         private void Selected()

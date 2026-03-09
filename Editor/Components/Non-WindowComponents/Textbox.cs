@@ -25,17 +25,21 @@ namespace Editor.Components.Components
             Console.Write(this.Label + ": " +  this.Value);
         }
 
-        public void HandleKey(ConsoleKeyInfo info)
+        public bool HandleKey(ConsoleKeyInfo info)
         {
             if (this.keys.ContainsKey(info.Key))
             {
                 this.keys[info.Key]();
+                return true;
             }
             else if (!char.IsControl(info.KeyChar))
             {
                 this.Value += info.KeyChar;
                 this.ValueChanged?.Invoke(this.Value);
+                return true;
             }
+
+            return false;
         }
 
         private void Backspace()

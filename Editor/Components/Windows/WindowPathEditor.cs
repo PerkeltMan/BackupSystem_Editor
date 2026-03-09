@@ -17,14 +17,19 @@ namespace Editor.Components.Windows
             this.Keys[ConsoleKey.Tab] = this.Tab;
             this.Keys[ConsoleKey.Escape] = this.Exit;
 
-            ListBox listBox = new ListBox(this.paths, (pathToDelete) => {
+            ListBox listBox = new ListBox(this.paths, (pathToDelete) =>
+            {
                 this.paths.Remove(pathToDelete);
-                });
+            });
 
-            DirectoryBrowser directoryBrowser = new DirectoryBrowser((newPath) => {
-                this.paths.Add(newPath);
+            DirectoryBrowser directoryBrowser = new DirectoryBrowser((newPath) =>
+            {
+                if (!this.paths.Contains(newPath))
+                {
+                    this.paths.Add(newPath);
+                }
                 listBox.AddItem(newPath);
-                });
+            });
 
             this.Components.Add(listBox);
             this.Components.Add(directoryBrowser);
@@ -45,7 +50,7 @@ namespace Editor.Components.Windows
 
         private void Tab()
         {
-            this.SelectedComponent ^= 1;
+            this.SelectedComponent = (this.SelectedComponent + 1) % this.Components.Count;
         }
 
         private void Exit()
@@ -54,12 +59,14 @@ namespace Editor.Components.Windows
 
             WindowChoose choose = new WindowChoose(message,
                 ("Yes", () =>
-                {   
+                {
                     this.OnPathChanged?.Invoke(this.paths);
                     this.RequestShutWindow();
                     this.RequestShutWindow();
-                }),
-                ("No", () => { this.RequestShutWindow(); this.RequestShutWindow(); } )
+                }
+            ),
+                ("No", () => { this.RequestShutWindow(); this.RequestShutWindow(); }
+            )
                 );
 
             this.RequestCreateWindow(choose);

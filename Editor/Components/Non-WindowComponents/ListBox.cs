@@ -5,10 +5,11 @@ namespace Editor.Components.Non_WindowComponents
 {
     public class ListBox : IComponent
     {
+        private int selectedIndex = 0;
+        private List<IComponent> items = new();
+        private List<string> data = new();
         Dictionary<ConsoleKey, Action> keys { get; set; } = new();
 
-        private List<IComponent> items = new();
-        private int selectedIndex = 0;
 
         public event Action<string>? ItemSelected;
 
@@ -27,6 +28,7 @@ namespace Editor.Components.Non_WindowComponents
                     this.RemoveItem(item);
                     this.ItemSelected?.Invoke(item);
                 };
+                this.data.Add(item);
                 this.items.Add(button);
             }
         }
@@ -40,21 +42,26 @@ namespace Editor.Components.Non_WindowComponents
 
                 this.items[i].Draw();
 
+                Console.WriteLine();
+
                 Console.ResetColor();
             }
         }
 
-        public void HandleKey(ConsoleKeyInfo key)
+        public bool HandleKey(ConsoleKeyInfo key)
         {
             if (this.keys.ContainsKey(key.Key))
             {
                 this.keys[key.Key].Invoke();
+                return true;
             }
             else if (this.items.Count > 0)
             {
                 this.items[selectedIndex].HandleKey(key);
+                return true;
             }
-            else return;
+
+            return false;
         }
 
         private void KeyUp()
@@ -70,14 +77,15 @@ namespace Editor.Components.Non_WindowComponents
         public void RemoveItem(string item)
         {
             this.items.RemoveAll(button => button.ToString() == item);
+            this.data.RemoveAll(path => item == path);
             this.selectedIndex = 0;
         }
 
         public void AddItem(string item)
         {
-            if (this.items.Any(button => button.ToString() == item))
-                return;
+            if (this.data.Contains(item)) return;
 
+            this.data.Add(item);
             Button button = new Button(item, () => this.ItemSelected?.Invoke(item));
             this.items.Add(button);
         }

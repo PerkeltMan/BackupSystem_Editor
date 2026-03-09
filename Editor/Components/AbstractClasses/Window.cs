@@ -21,6 +21,11 @@ namespace Editor.Components.AbstractClasses
 
         public virtual void HandleKey(ConsoleKeyInfo keyInfo)
         {
+            if (this.Components[SelectedComponent].HandleKey(keyInfo))
+            {
+                return;
+            }
+
             if (this.Keys.ContainsKey(keyInfo.Key))
             {
                 this.Keys[keyInfo.Key].Invoke();
@@ -43,6 +48,7 @@ namespace Editor.Components.AbstractClasses
                 }
 
                 this.Components[i].Draw();
+                Console.WriteLine();
                 Console.ResetColor();
             }
         }
